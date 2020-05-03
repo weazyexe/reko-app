@@ -1,0 +1,2 @@
+rootProject.name='reko-app'
+include ':app'
