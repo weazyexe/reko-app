@@ -16,6 +16,12 @@ class LoginViewModel : ViewModel() {
 
     val state = MutableLiveData(ScreenState.DEFAULT)
 
+    fun checkAccount() {
+        if (repository.isSignedIn()) {
+            state.postValue(ScreenState.SUCCESS)
+        }
+    }
+
     fun signIn(login: String, password: String) {
         if (validateLogin(login) && validatePassword(password)) {
             state.postValue(ScreenState.LOADING)

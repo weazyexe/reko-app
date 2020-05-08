@@ -8,7 +8,11 @@
     <string name="field_can_not_be_empty">Поле не может быть пустым</string>
     <string name="wrong_credentials">Вы ввели неверные данные. Попробуйте ещё раз</string>
 
-    <string name="feed">Лента распознанных</string>
+    <string name="feed">Распознанные лица</string>
     <string name="recognize">Распознать</string>
     <string name="settings">Настройки</string>
+
+    <string name="no_recognized">Нет распознанных изображений</string>
+    <string name="loading_error">Ошибка при загрузке данных</string>
+    <string name="recognized_image">Распознанное изображение</string>
 </resources>

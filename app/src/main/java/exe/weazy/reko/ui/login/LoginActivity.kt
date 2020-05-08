@@ -24,6 +24,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         viewModel = useViewModel(this, LoginViewModel::class.java)
+        viewModel.checkAccount()
 
         initObservers()
         initListeners()
