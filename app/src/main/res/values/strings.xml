@@ -8,27 +8,7 @@
     <string name="field_can_not_be_empty">Поле не может быть пустым</string>
     <string name="wrong_credentials">Вы ввели неверные данные. Попробуйте ещё раз</string>
 
-    <string name="popular_memes">Популярные мемы</string>
-    <string name="create_meme">Создать мем</string>
-    <string name="profile">Профиль</string>
-    <string name="meme">Мем</string>
-    <string name="like">Лайк</string>
-    <string name="share">Поделиться</string>
-    <string name="memes_loading_error">Не удалось загрузить ленту\nОбновите настройки или попробуйте позже</string>
-    <string name="memes_empty">Ты чево наделал, где мемы?</string>
-    <string name="memes_error">Произошла ошибка при загрузке</string>
-    <string name="memes_error_write">Произошла ошибка при создании мема</string>
-    <string name="close">Закрыть</string>
-    <string name="create">Создать</string>
-    <string name="title">Заголовок</string>
-    <string name="description">Описание</string>
-    <string name="meme_created">Мем создан</string>
-    <string name="choose_from_gallery">Выбрать из галереи</string>
-    <string name="make_a_photo">Сделать фото</string>
-    <string name="choose_a_photo">Выбрать фото</string>
-    <string name="cancel">Отмена</string>
-    <string name="about_app">О приложении</string>
-    <string name="logout">Выйти</string>
-    <string name="more">Подробнее</string>
-    <string name="are_you_sure_for_logout">Вы уверены, что хотите выйти?</string>
+    <string name="feed">Лента распознанных</string>
+    <string name="recognize">Распознать</string>
+    <string name="settings">Настройки</string>
 </resources>

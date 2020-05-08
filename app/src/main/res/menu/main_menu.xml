@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/memesButton"
-        android:title="@string/popular_memes"
-        android:icon="@drawable/ic_dashboard_white_24dp"/>
+        android:id="@+id/feedButton"
+        android:title="@string/feed"
+        android:icon="@drawable/ic_filter_blue_24dp"/>
 
     <item
-        android:id="@+id/createMemeButton"
-        android:title="@string/create_meme"
-        android:icon="@drawable/ic_add_circle_white_24dp"/>
+        android:id="@+id/recognizeButton"
+        android:title="@string/recognize"
+        android:icon="@drawable/ic_whatshot_blue_24dp"/>
 
     <item
-        android:id="@+id/profileButton"
-        android:title="@string/profile"
-        android:icon="@drawable/ic_person_white_24dp"/>
+        android:id="@+id/settingsButton"
+        android:title="@string/settings"
+        android:icon="@drawable/ic_settings_blue_24dp"/>
 </menu>

@@ -28,21 +28,21 @@ class MainActivity : AppCompatActivity() {
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
-            R.id.memesButton -> {
+            R.id.feedButton -> {
                 newPosition = 0
                 if (startingPosition != newPosition) {
                     changeFragment(feedFragment)
                 }
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.createMemeButton -> {
+            R.id.recognizeButton -> {
                 newPosition = 1
                 if (startingPosition != newPosition) {
                     changeFragment(recognizeFragment)
                 }
-                return@OnNavigationItemSelectedListener false
+                return@OnNavigationItemSelectedListener true
             }
-            R.id.profileButton -> {
+            R.id.settingsButton -> {
                 newPosition = 2
                 if (startingPosition != newPosition) {
                     changeFragment(settingsFragment)
@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().add(R.id.fragmentLayout, recognizeFragment).hide(recognizeFragment).commit()
         supportFragmentManager.beginTransaction().add(R.id.fragmentLayout, settingsFragment).hide(settingsFragment).commit()
 
-        bottomNav.selectedItemId = R.id.memesButton
+        bottomNav.selectedItemId = R.id.feedButton
         active = feedFragment
     }
 
