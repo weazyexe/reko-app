@@ -1,4 +1,4 @@
-package exe.weazy.reko.data.storage
+package exe.weazy.reko.data.prefs
 
 import android.content.Context
 import android.content.SharedPreferences
