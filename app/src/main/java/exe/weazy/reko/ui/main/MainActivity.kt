@@ -1,23 +1,24 @@
 package exe.weazy.reko.ui.main
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import exe.weazy.reko.R
-import exe.weazy.reko.ui.main.create.CreateMemeActivity
-import exe.weazy.reko.ui.main.memes.MemesFragment
-import exe.weazy.reko.ui.main.profile.ProfileFragment
+import exe.weazy.reko.ui.main.feed.FeedFragment
+import exe.weazy.reko.ui.main.recognize.RecognizeFragment
+import exe.weazy.reko.ui.main.settings.SettingsFragment
 import exe.weazy.reko.util.extensions.useViewModel
 import exe.weazy.reko.util.handleBottomInsets
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var memesFragment: MemesFragment
-    private lateinit var profileFragment: ProfileFragment
+    private lateinit var feedFragment: FeedFragment
+    private lateinit var recognizeFragment: RecognizeFragment
+    private lateinit var settingsFragment: SettingsFragment
+
     private var active = Fragment()
 
     private lateinit var viewModel : MainViewModel
@@ -30,19 +31,21 @@ class MainActivity : AppCompatActivity() {
             R.id.memesButton -> {
                 newPosition = 0
                 if (startingPosition != newPosition) {
-                    changeFragment(memesFragment)
+                    changeFragment(feedFragment)
                 }
                 return@OnNavigationItemSelectedListener true
             }
             R.id.createMemeButton -> {
-                val intent = Intent(this, CreateMemeActivity::class.java)
-                startActivity(intent)
+                newPosition = 1
+                if (startingPosition != newPosition) {
+                    changeFragment(recognizeFragment)
+                }
                 return@OnNavigationItemSelectedListener false
             }
             R.id.profileButton -> {
                 newPosition = 2
                 if (startingPosition != newPosition) {
-                    changeFragment(profileFragment)
+                    changeFragment(settingsFragment)
                 }
                 return@OnNavigationItemSelectedListener true
             }
@@ -66,14 +69,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadFragments() {
-        memesFragment = MemesFragment()
-        profileFragment = ProfileFragment()
+        feedFragment = FeedFragment()
+        recognizeFragment = RecognizeFragment()
+        settingsFragment = SettingsFragment()
 
-        supportFragmentManager.beginTransaction().add(R.id.fragmentLayout, memesFragment).commit()
-        supportFragmentManager.beginTransaction().add(R.id.fragmentLayout, profileFragment).hide(profileFragment).commit()
+        supportFragmentManager.beginTransaction().add(R.id.fragmentLayout, feedFragment).commit()
+        supportFragmentManager.beginTransaction().add(R.id.fragmentLayout, recognizeFragment).hide(recognizeFragment).commit()
+        supportFragmentManager.beginTransaction().add(R.id.fragmentLayout, settingsFragment).hide(settingsFragment).commit()
 
         bottomNav.selectedItemId = R.id.memesButton
-        active = memesFragment
+        active = feedFragment
     }
 
     private fun changeFragment(fragment : Fragment) {

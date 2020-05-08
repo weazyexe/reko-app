@@ -14,9 +14,8 @@ class App : Application() {
         super.onCreate()
 
         component = DaggerAppComponent.builder()
-            .networkModule(NetworkModule(applicationContext))
-            .databaseModule(DatabaseModule(applicationContext))
-            .repositoryModule(RepositoryModule(applicationContext))
+            .networkModule(NetworkModule())
+            .repositoryModule(RepositoryModule())
             .build()
     }
 }
