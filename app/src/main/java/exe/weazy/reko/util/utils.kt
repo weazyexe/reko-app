@@ -1,14 +1,11 @@
 package exe.weazy.reko.util
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Build
 import android.view.View
 import androidx.core.view.ViewCompat
 import androidx.core.view.marginBottom
 import androidx.core.view.updatePadding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import exe.weazy.reko.model.Meme
 import exe.weazy.reko.util.extensions.updateMargin
 
 fun handleBottomInsets(vararg views: View) {
@@ -39,18 +36,4 @@ fun handleTopInsets(vararg views: View) {
             insets
         }
     }
-}
-
-fun share(activity: Activity, meme: Meme) {
-
-    val text = "${meme.title}\n${meme.description}\n${meme.photoUrl}"
-
-    val sendIntent: Intent = Intent().apply {
-        action = Intent.ACTION_SEND
-        putExtra(Intent.EXTRA_TEXT, text)
-        type = "text/plain"
-    }
-
-    val shareIntent = Intent.createChooser(sendIntent, null)
-    activity.startActivity(shareIntent)
 }

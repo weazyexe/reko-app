@@ -12,21 +12,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="exe.weazy.reko.ui.main.create.CreateMemeActivity"></activity>
-        <activity android:name="exe.weazy.reko.ui.main.memes.MemeActivity" />
+        <activity android:name="exe.weazy.reko.ui.main.MainActivity" />
         <activity
-            android:name="exe.weazy.reko.ui.splash.SplashActivity"
-            android:theme="@style/AppTheme.Launcher">
+            android:name="exe.weazy.reko.ui.login.LoginActivity"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="exe.weazy.reko.ui.main.MainActivity" />
-        <activity
-            android:name="exe.weazy.reko.ui.login.LoginActivity"
-            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

@@ -3,15 +3,11 @@ package exe.weazy.reko.ui.login
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import exe.weazy.reko.data.AuthRepository
-import exe.weazy.reko.data.storage.UserStorage
-import exe.weazy.reko.di.App
-import exe.weazy.reko.model.UserInfo
 import exe.weazy.reko.state.ScreenState
 import exe.weazy.reko.util.extensions.isValidLogin
 import exe.weazy.reko.util.extensions.isValidPassword
 import exe.weazy.reko.util.extensions.subscribe
 import io.reactivex.disposables.Disposable
-import javax.inject.Inject
 
 class LoginViewModel : ViewModel() {
 
@@ -19,6 +15,12 @@ class LoginViewModel : ViewModel() {
     private lateinit var signInDisposable: Disposable
 
     val state = MutableLiveData(ScreenState.DEFAULT)
+
+    fun checkAccount() {
+        if (repository.isSignedIn()) {
+            state.postValue(ScreenState.SUCCESS)
+        }
+    }
 
     fun signIn(login: String, password: String) {
         if (validateLogin(login) && validatePassword(password)) {
