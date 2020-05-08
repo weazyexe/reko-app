@@ -27,7 +27,7 @@
                 android:id="@+id/loginEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="phone"
+                android:inputType="textEmailAddress"
                 android:textColor="@color/colorWhite" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -43,8 +43,7 @@
                 android:id="@+id/passwordEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberPassword"
-                android:maxLength="6"
+                android:inputType="textPassword"
                 android:textColor="@color/colorWhite" />
 
         </com.google.android.material.textfield.TextInputLayout>

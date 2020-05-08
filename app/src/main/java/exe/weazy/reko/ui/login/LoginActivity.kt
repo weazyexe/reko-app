@@ -84,9 +84,6 @@ class LoginActivity : AppCompatActivity() {
                 showErrorSnackbar(R.string.wrong_credentials, rootViewLogin)
             }
             ScreenState.SUCCESS -> {
-                viewModel.let {
-                    it.saveUserData(it.userInfo, it.accessToken)
-                }
                 openMainScreen()
             }
         }

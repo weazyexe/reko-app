@@ -15,20 +15,10 @@ import javax.inject.Inject
 
 class LoginViewModel : ViewModel() {
 
-    @Inject
-    lateinit var userStorage: UserStorage
-
     private val repository = AuthRepository()
     private lateinit var signInDisposable: Disposable
 
     val state = MutableLiveData(ScreenState.DEFAULT)
-
-    lateinit var userInfo: UserInfo
-    lateinit var accessToken: String
-
-    init {
-        App.getComponent().injectLoginViewModel(this)
-    }
 
     fun signIn(login: String, password: String) {
         if (validateLogin(login) && validatePassword(password)) {
@@ -38,8 +28,6 @@ class LoginViewModel : ViewModel() {
                 signInDisposable.dispose()
             }
             signInDisposable = subscribe(repository.signIn(login, password), {
-                userInfo = it.userInfo?.convert() ?: UserInfo.empty()
-                accessToken = it.accessToken
                 state.postValue(ScreenState.SUCCESS)
             }, {
                 state.postValue(ScreenState.ERROR)
@@ -52,9 +40,4 @@ class LoginViewModel : ViewModel() {
     fun validateLogin(text: String) = text.isValidLogin()
 
     fun validatePassword(text: String) = text.isValidPassword()
-
-    fun saveUserData(userInfo: UserInfo, token: String) {
-        userStorage.saveUserInfo(userInfo)
-        userStorage.saveAccessToken(token)
-    }
 }
