@@ -9,7 +9,6 @@ import exe.weazy.reko.R
 import exe.weazy.reko.ui.main.feed.FeedFragment
 import exe.weazy.reko.ui.main.recognize.RecognizeFragment
 import exe.weazy.reko.ui.main.settings.SettingsFragment
-import exe.weazy.reko.util.extensions.useViewModel
 import exe.weazy.reko.util.handleBottomInsets
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -20,8 +19,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var settingsFragment: SettingsFragment
 
     private var active = Fragment()
-
-    private lateinit var viewModel : MainViewModel
 
     private var newPosition = 0
     private var startingPosition = 0
@@ -61,7 +58,6 @@ class MainActivity : AppCompatActivity() {
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 
         handleBottomInsets(bottomNav)
-        viewModel = useViewModel(this, MainViewModel::class.java)
 
         bottomNav.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
