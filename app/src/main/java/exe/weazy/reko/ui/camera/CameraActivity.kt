@@ -17,7 +17,8 @@ import kotlinx.android.synthetic.main.activity_camera.*
 
 class CameraActivity : AppCompatActivity() {
 
-    private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
+    private lateinit var cameraProvider: ProcessCameraProvider
+    private var isBackCamera = true
 
     private val REQUEST_CAMERA_CODE = 101;
     private val REQUEST_WRITE_EXTERNAL_STORAGE_CODE = 102;
@@ -65,12 +66,21 @@ class CameraActivity : AppCompatActivity() {
         } else {
             ActivityCompat.requestPermissions(this, PERMISSIONS, REQUEST_CAMERA_CODE)
         }
+
+        initListeners()
+    }
+
+    private fun initListeners() {
+        switchButton.setOnClickListener {
+            isBackCamera = !isBackCamera
+            initCamera()
+        }
     }
 
     private fun initCamera() {
-        cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraProviderFuture.addListener(Runnable {
-            val cameraProvider = cameraProviderFuture.get()
+            cameraProvider = cameraProviderFuture.get()
             bindPreview(cameraProvider)
         }, ContextCompat.getMainExecutor(this))
     }
@@ -78,7 +88,7 @@ class CameraActivity : AppCompatActivity() {
     private fun bindPreview(cameraProvider: ProcessCameraProvider) {
         val preview = Preview.Builder().build()
         val cameraSelector = CameraSelector.Builder()
-            .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+            .requireLensFacing(if (isBackCamera) CameraSelector.LENS_FACING_BACK else CameraSelector.LENS_FACING_FRONT)
             .build()
         val camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview)
         preview.setSurfaceProvider(previewView.createSurfaceProvider(camera.cameraInfo))

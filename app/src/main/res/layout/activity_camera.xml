@@ -28,4 +28,14 @@
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="32dp"/>
 
+    <ImageButton
+        android:id="@+id/switchButton"
+        android:src="@drawable/switch_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="48dp"
+        android:layout_marginBottom="44dp"/>
+
 </FrameLayout>
