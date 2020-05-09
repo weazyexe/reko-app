@@ -30,7 +30,6 @@ class FeedFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         handleTopInsets(profileToolbarLayout)
-        profileToolbar.title = getString(R.string.feed)
 
         viewModel = useViewModel(this, FeedViewModel::class.java)
         viewModel.fetch()
