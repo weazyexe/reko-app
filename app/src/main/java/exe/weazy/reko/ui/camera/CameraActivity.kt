@@ -2,6 +2,7 @@ package exe.weazy.reko.ui.camera
 
 import android.Manifest
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -14,6 +15,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import exe.weazy.reko.R
 import exe.weazy.reko.ui.image.ImageActivity
@@ -82,7 +84,7 @@ class CameraActivity : AppCompatActivity() {
             imageCapture.takePicture(outputFileOptions, { it.run() },
                 object: ImageCapture.OnImageSavedCallback {
                     override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                        openImage(file.absolutePath)
+                        openImage(file.toUri())
                     }
 
                     override fun onError(exception: ImageCaptureException) {
@@ -123,7 +125,7 @@ class CameraActivity : AppCompatActivity() {
         noPermissionLayout.isVisible = true
     }
 
-    private fun openImage(path: String) {
+    private fun openImage(path: Uri) {
         val intent = Intent(this, ImageActivity::class.java)
         intent.putExtra(IMAGE_PATH, path)
         startActivity(intent)
