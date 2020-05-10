@@ -18,6 +18,7 @@ import androidx.core.view.isVisible
 import exe.weazy.reko.R
 import exe.weazy.reko.ui.image.ImageActivity
 import exe.weazy.reko.util.values.IMAGE_PATH
+import exe.weazy.reko.util.values.REQUEST_CAMERA_CODE
 import kotlinx.android.synthetic.main.activity_camera.*
 import java.io.File
 import java.util.*
@@ -28,12 +29,8 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var imageCapture: ImageCapture
     private var isBackCamera = true
 
-    private val REQUEST_CAMERA_CODE = 101;
-    private val REQUEST_WRITE_EXTERNAL_STORAGE_CODE = 102;
-
     private val PERMISSIONS = arrayOf(
-        Manifest.permission.CAMERA,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
+        Manifest.permission.CAMERA
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,13 +48,6 @@ class CameraActivity : AppCompatActivity() {
             REQUEST_CAMERA_CODE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PermissionChecker.PERMISSION_GRANTED) {
                     initCamera()
-                } else {
-                    showNoPermissions()
-                }
-            }
-            REQUEST_WRITE_EXTERNAL_STORAGE_CODE -> {
-                if (grantResults.all { it == PermissionChecker.PERMISSION_GRANTED }) {
-                    //initCamera()
                 } else {
                     showNoPermissions()
                 }
@@ -88,19 +78,20 @@ class CameraActivity : AppCompatActivity() {
             val filename = "${Date().time.toString(16)}.jpeg"
             val file = File(externalMediaDirs.first(), filename)
             val outputFileOptions = ImageCapture.OutputFileOptions.Builder(file).build()
-            imageCapture.takePicture(outputFileOptions, {
-                it.run()
-            }, object: ImageCapture.OnImageSavedCallback {
-                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    openImage(file.absolutePath)
-                }
 
-                override fun onError(exception: ImageCaptureException) {
-                    runOnUiThread {
-                        Toast.makeText(this@CameraActivity, "Ошибка при сохранении изображения", Toast.LENGTH_SHORT).show()
+            imageCapture.takePicture(outputFileOptions, { it.run() },
+                object: ImageCapture.OnImageSavedCallback {
+                    override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                        openImage(file.absolutePath)
+                    }
+
+                    override fun onError(exception: ImageCaptureException) {
+                        runOnUiThread {
+                            Toast.makeText(this@CameraActivity, "Ошибка при сохранении изображения", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
-            })
+            )
         }
     }
 
