@@ -1,16 +1,19 @@
 package exe.weazy.reko.data.firebase
 
+import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.storage.FirebaseStorage
+import exe.weazy.reko.util.generateId
 import io.reactivex.Observable
 
 object RxFirebase {
 
     private val auth = FirebaseAuth.getInstance()
     private val firestore = FirebaseFirestore.getInstance()
+    private val storage = FirebaseStorage.getInstance()
 
     fun signIn(email: String, password: String): Observable<FirebaseUser> = Observable.create { emitter ->
         auth.signInWithEmailAndPassword(email, password)
@@ -19,6 +22,7 @@ object RxFirebase {
                     val user = it.result?.user
                     if (user != null) {
                         emitter.onNext(user)
+                        emitter.onComplete()
                     } else {
                         emitter.onError(Throwable("User is null"))
                     }
@@ -42,6 +46,7 @@ object RxFirebase {
                         val docs = it.result?.documents
                         if (docs != null) {
                             emitter.onNext(docs)
+                            emitter.onComplete()
                         } else {
                             emitter.onError(Throwable("Request is successful but documents are null"))
                         }
@@ -51,6 +56,38 @@ object RxFirebase {
                 }
                 .addOnCanceledListener {
                     emitter.onError(Throwable("Request was cancelled"))
+                }
+        }
+    }
+
+    fun uploadImage(imageUri: Uri) : Observable<String> = Observable.create { emitter ->
+        val uid = auth.currentUser?.uid
+        if (uid == null) {
+            emitter.onError(Throwable("User id is null"))
+        } else {
+            val filename = generateId()
+            val ref = storage.getReference("$uid/$filename.jpeg")
+            ref.putFile(imageUri)
+                .addOnCompleteListener { loadTask ->
+                    if (loadTask.isSuccessful) {
+                        ref.downloadUrl
+                            .addOnCompleteListener {
+                                if (it.isSuccessful) {
+                                    emitter.onNext(it.result.toString())
+                                    emitter.onComplete()
+                                } else {
+                                    emitter.onError(Throwable("Download URL request isn't successful"))
+                                }
+                            }
+                            .addOnCanceledListener {
+                                emitter.onError(Throwable("Download URL was cancelled"))
+                            }
+                    } else {
+                        emitter.onError(Throwable("Put file request isn't successful"))
+                    }
+                }
+                .addOnCanceledListener {
+                    emitter.onError(Throwable("Put file request was cancelled"))
                 }
         }
     }

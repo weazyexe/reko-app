@@ -2,6 +2,9 @@ package exe.weazy.reko.util.values
 
 const val PREFERENCES_FILENAME = "MEMES_PREFS"
 
+const val APPLICATION_KEY = "APPLICATION_KEY"
+const val APPLICATION_SECRET_KEY = "APPLICATION_SECRET_KEY"
+
 const val IMAGE_PATH = "IMAGE_PATH"
 
 const val REQUEST_CAMERA_CODE = 101
