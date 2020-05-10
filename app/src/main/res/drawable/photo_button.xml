@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:height="72dp"
+        android:width="72dp">
+        <shape
+            android:shape="oval"
+            android:tint="#44ffffff" />
+    </item>
+    <item
+        android:drawable="@drawable/ic_photo_camera_white_24dp"
+        android:width="32dp"
+        android:height="32dp"
+        android:gravity="center"/>
+</layer-list>

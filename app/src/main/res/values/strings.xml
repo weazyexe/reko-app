@@ -15,4 +15,7 @@
     <string name="no_recognized">Нет распознанных изображений</string>
     <string name="loading_error">Ошибка при загрузке данных</string>
     <string name="recognized_image">Распознанное изображение</string>
+    <string name="make_a_photo">Сделать фото</string>
+    <string name="choose_from_gallery">Выбрать из галереи</string>
+    <string name="no_required_permissions">Нет нужных разрешений</string>
 </resources>
