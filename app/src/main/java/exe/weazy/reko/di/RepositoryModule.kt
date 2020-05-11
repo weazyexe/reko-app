@@ -6,6 +6,7 @@ import dagger.Provides
 import exe.weazy.reko.data.ApiKeyRepository
 import exe.weazy.reko.data.AuthRepository
 import exe.weazy.reko.data.RecognizedRepository
+import exe.weazy.reko.data.SettingsRepository
 import javax.inject.Singleton
 
 @Module
@@ -20,4 +21,7 @@ class RepositoryModule(private val context: Context) {
 
     @Provides
     fun provideAuthRepository() = AuthRepository()
+
+    @Provides
+    fun provideSettingsRepository() = SettingsRepository(context)
 }

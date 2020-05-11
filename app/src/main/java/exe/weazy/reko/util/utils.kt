@@ -1,5 +1,7 @@
 package exe.weazy.reko.util
 
+import android.content.Context
+import android.net.Uri
 import android.os.Build
 import android.view.View
 import androidx.core.view.ViewCompat
@@ -7,7 +9,9 @@ import androidx.core.view.marginBottom
 import androidx.core.view.updatePadding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import exe.weazy.reko.util.extensions.updateMargin
+import java.io.File
 import kotlin.random.Random
+
 
 fun handleBottomInsets(vararg views: View) {
     views.forEach { view ->
@@ -46,4 +50,10 @@ fun generateId(length: Int = 10): String {
         sb.append(symbols[Random.nextInt(symbols.length)])
     }
     return sb.toString()
+}
+
+fun Uri.toFileUri(): Uri {
+    val file = File(path) //create path from uri
+    val splitted = file.path.split(':')
+    return Uri.fromFile(File(splitted[1]))
 }

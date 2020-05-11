@@ -4,11 +4,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import exe.weazy.reko.data.ApiKeyRepository
 import exe.weazy.reko.data.AuthRepository
+import exe.weazy.reko.data.SettingsRepository
 import exe.weazy.reko.di.App
 import exe.weazy.reko.state.ScreenState
 import exe.weazy.reko.util.extensions.isValidLogin
 import exe.weazy.reko.util.extensions.isValidPassword
 import exe.weazy.reko.util.extensions.subscribe
+import exe.weazy.reko.util.values.SKY_BIOMETRY_RECOGNIZER
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
@@ -19,6 +21,9 @@ class LoginViewModel : ViewModel() {
 
     @Inject
     lateinit var apiKeyRepository: ApiKeyRepository
+
+    @Inject
+    lateinit var settingsRepository: SettingsRepository
 
     private lateinit var signInDisposable: Disposable
 
@@ -48,6 +53,7 @@ class LoginViewModel : ViewModel() {
             signInDisposable = subscribe(observable, {
                 apiKeyRepository.saveApplicationKey(it.application_key)
                 apiKeyRepository.saveApplicationSecretKey(it.application_secret_key)
+                settingsRepository.saveRecognizer(SKY_BIOMETRY_RECOGNIZER)
 
                 state.postValue(ScreenState.SUCCESS)
             }, {

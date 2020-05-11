@@ -5,5 +5,5 @@ import exe.weazy.reko.model.Recognized
 import io.reactivex.Observable
 
 interface Recognizer {
-    fun recognize(link: String): Observable<Recognized>
+    fun recognize(imageUri: Uri): Observable<Recognized>
 }

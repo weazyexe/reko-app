@@ -15,6 +15,7 @@ import exe.weazy.reko.R
 import exe.weazy.reko.ui.camera.CameraActivity
 import exe.weazy.reko.ui.image.ImageActivity
 import exe.weazy.reko.util.handleTopInsets
+import exe.weazy.reko.util.toFileUri
 import exe.weazy.reko.util.values.IMAGE_PATH
 import exe.weazy.reko.util.values.REQUEST_GALLERY_CODE
 import exe.weazy.reko.util.values.REQUEST_READ_EXTERNAL_STORAGE_CODE
@@ -39,7 +40,7 @@ class RecognizeFragment : Fragment() {
                 if (data != null && data.data != null) {
                     val content = data.data
                     if (content != null) {
-                        openImage(content)
+                        openImage(content.toFileUri())
                     }
                 }
             }
