@@ -1,6 +1,7 @@
 package exe.weazy.reko.di
 
 import dagger.Component
+import exe.weazy.reko.ui.login.LoginViewModel
 import exe.weazy.reko.ui.main.feed.FeedViewModel
 import javax.inject.Singleton
 
@@ -8,4 +9,5 @@ import javax.inject.Singleton
 @Component(modules = [NetworkModule::class, RepositoryModule::class])
 interface AppComponent {
     fun inject(feedViewModel: FeedViewModel)
+    fun inject(loginViewModel: LoginViewModel)
 }

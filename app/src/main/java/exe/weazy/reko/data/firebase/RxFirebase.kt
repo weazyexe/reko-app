@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import exe.weazy.reko.data.firebase.raws.ApiKeysRaw
 import exe.weazy.reko.util.generateId
 import io.reactivex.Observable
 
@@ -26,6 +27,20 @@ object RxFirebase {
                     } else {
                         emitter.onError(Throwable("User is null"))
                     }
+                } else {
+                    emitter.onError(Throwable("Request isn't successful"))
+                }
+            }
+            .addOnCanceledListener {
+                emitter.onError(Throwable("Request was cancelled"))
+            }
+    }
+
+    fun getApiKeys(): Observable<ApiKeysRaw> = Observable.create { emitter ->
+        firestore.document("api_keys/info").get()
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    emitter.onNext(it.result?.toObject(ApiKeysRaw::class.java) ?: throw Throwable("Result is null"))
                 } else {
                     emitter.onError(Throwable("Request isn't successful"))
                 }

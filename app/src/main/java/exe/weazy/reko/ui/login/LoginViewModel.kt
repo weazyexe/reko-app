@@ -2,22 +2,34 @@ package exe.weazy.reko.ui.login
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import exe.weazy.reko.data.ApiKeyRepository
 import exe.weazy.reko.data.AuthRepository
+import exe.weazy.reko.di.App
 import exe.weazy.reko.state.ScreenState
 import exe.weazy.reko.util.extensions.isValidLogin
 import exe.weazy.reko.util.extensions.isValidPassword
 import exe.weazy.reko.util.extensions.subscribe
 import io.reactivex.disposables.Disposable
+import javax.inject.Inject
 
 class LoginViewModel : ViewModel() {
 
-    private val repository = AuthRepository()
+    @Inject
+    lateinit var authRepository: AuthRepository
+
+    @Inject
+    lateinit var apiKeyRepository: ApiKeyRepository
+
     private lateinit var signInDisposable: Disposable
 
     val state = MutableLiveData(ScreenState.DEFAULT)
 
+    init {
+        App.getComponent().inject(this)
+    }
+
     fun checkAccount() {
-        if (repository.isSignedIn()) {
+        if (authRepository.isSignedIn()) {
             state.postValue(ScreenState.SUCCESS)
         }
     }
@@ -29,7 +41,14 @@ class LoginViewModel : ViewModel() {
             if (::signInDisposable.isInitialized) {
                 signInDisposable.dispose()
             }
-            signInDisposable = subscribe(repository.signIn(login, password), {
+
+            val observable = authRepository.signIn(login, password)
+                .flatMap { apiKeyRepository.updateApiKeys() }
+
+            signInDisposable = subscribe(observable, {
+                apiKeyRepository.saveApplicationKey(it.application_key)
+                apiKeyRepository.saveApplicationSecretKey(it.application_secret_key)
+
                 state.postValue(ScreenState.SUCCESS)
             }, {
                 state.postValue(ScreenState.ERROR)
