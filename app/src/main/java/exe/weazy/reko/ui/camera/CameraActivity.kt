@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Size
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -113,6 +114,7 @@ class CameraActivity : AppCompatActivity() {
             .build()
 
         imageCapture = ImageCapture.Builder()
+            .setTargetResolution(Size(720, 1280))
             .setTargetRotation(previewView.display.rotation)
             .build()
 

@@ -82,7 +82,7 @@ class ImageActivity : AppCompatActivity() {
 
         val mainEmotion = recognized.emotions.maxBy { it.value }?.key
         if (mainEmotion != null) {
-            mainEmotionTextView.text = mainEmotion
+            mainEmotionTextView.text = "${mainEmotion.toTitleCase()} - ${recognized.emotions[mainEmotion]}%"
             otherEmotionsTextView.text = composeOtherEmotions(recognized.emotions, mainEmotion)
         }
     }
@@ -90,7 +90,7 @@ class ImageActivity : AppCompatActivity() {
     private fun composeOtherEmotions(emotions: Map<String, Int>, main: String): String {
         val sb = StringBuilder()
 
-        emotions.forEach {
+        emotions.toSortedMap().forEach {
             if (it.key != main) {
                 sb.append("${it.key.toTitleCase()} - ${it.value}%\n")
             }

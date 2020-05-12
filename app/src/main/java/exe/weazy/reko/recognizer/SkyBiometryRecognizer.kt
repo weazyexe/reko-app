@@ -27,7 +27,7 @@ class SkyBiometryRecognizer : Recognizer {
         val filePart = MultipartBody.Part.createFormData(
             "urls",
             file.name,
-            RequestBody.create(MediaType.parse("multipart/form-data"), file)
+            RequestBody.create(null, file)
         )
         /*val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
         val body = MultipartBody.Part.createFormData("urls", file.name, requestFile);*/

@@ -26,31 +26,31 @@ data class RecognizedResponse(
     private fun getEmotions(tag: TagResponse): Map<String, Int> {
         val emotions = mutableMapOf<String, Int>()
 
-        if (tag.attributes.neutral.value) {
+        if (tag.attributes.neutral.confidence > 0) {
             emotions["NEUTRAL"] = tag.attributes.neutral.confidence
         }
 
-        if (tag.attributes.happiness.value) {
+        if (tag.attributes.happiness.confidence > 0) {
             emotions["HAPPINESS"] = tag.attributes.happiness.confidence
         }
 
-        if (tag.attributes.sadness.value) {
+        if (tag.attributes.sadness.confidence > 0) {
             emotions["SADNESS"] = tag.attributes.sadness.confidence
         }
 
-        if (tag.attributes.disgust.value) {
+        if (tag.attributes.disgust.confidence > 0) {
             emotions["DISGUST"] = tag.attributes.disgust.confidence
         }
 
-        if (tag.attributes.surprise.value) {
+        if (tag.attributes.surprise.confidence > 0) {
             emotions["SURPRISE"] = tag.attributes.surprise.confidence
         }
 
-        if (tag.attributes.anger.value) {
+        if (tag.attributes.anger.confidence > 0) {
             emotions["ANGER"] = tag.attributes.anger.confidence
         }
 
-        if (tag.attributes.fear.value) {
+        if (tag.attributes.fear.confidence > 0) {
             emotions["FEAR"] = tag.attributes.fear.confidence
         }
 
@@ -99,7 +99,7 @@ data class AttributesResponse(
 
 data class EmotionResponse(
     @SerializedName("value")
-    val value: Boolean,
+    val value: String,
 
     @SerializedName("confidence")
     val confidence: Int
