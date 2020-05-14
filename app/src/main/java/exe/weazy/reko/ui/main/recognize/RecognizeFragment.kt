@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import exe.weazy.reko.R
 import exe.weazy.reko.ui.camera.CameraActivity
@@ -19,6 +20,8 @@ import exe.weazy.reko.util.values.IMAGE_PATH
 import exe.weazy.reko.util.values.REQUEST_GALLERY_CODE
 import exe.weazy.reko.util.values.REQUEST_READ_EXTERNAL_STORAGE_CODE
 import kotlinx.android.synthetic.main.fragment_recognize.*
+import java.io.File
+import java.util.*
 
 
 class RecognizeFragment : Fragment() {
@@ -39,7 +42,16 @@ class RecognizeFragment : Fragment() {
                 if (data != null && data.data != null) {
                     val content = data.data
                     if (content != null) {
-                        openImage(content)
+                        // IT'S MAGIC 🌈
+                        try {
+                            val inputStream = context?.contentResolver?.openInputStream(content)
+                            val bytes = inputStream?.readBytes()
+                            val file = File(requireContext().filesDir, content.lastPathSegment ?: Date().time.toString())
+                            file.writeBytes(bytes!!)
+                            openImage(file.toUri())
+                        } catch (e: Exception) {
+                            Toast.makeText(requireContext(), e.message ?: "err", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             }

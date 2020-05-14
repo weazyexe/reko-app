@@ -7,6 +7,8 @@ import androidx.core.view.marginBottom
 import androidx.core.view.updatePadding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import exe.weazy.reko.util.extensions.updateMargin
+import kotlin.random.Random
+
 
 fun handleBottomInsets(vararg views: View) {
     views.forEach { view ->
@@ -36,4 +38,13 @@ fun handleTopInsets(vararg views: View) {
             insets
         }
     }
+}
+
+fun generateId(length: Int = 10): String {
+    val symbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+    val sb = StringBuilder()
+    for (i in 0..length) {
+        sb.append(symbols[Random.nextInt(symbols.length)])
+    }
+    return sb.toString()
 }

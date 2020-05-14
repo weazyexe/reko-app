@@ -1,8 +1,8 @@
 package exe.weazy.reko.di
 
-import android.content.Context
 import dagger.Module
 import dagger.Provides
+import exe.weazy.reko.data.ApiKeyRepository
 import exe.weazy.reko.data.network.AuthInterceptor
 import exe.weazy.reko.data.network.NetworkService
 import okhttp3.OkHttpClient
@@ -14,13 +14,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 class NetworkModule {
 
     @Provides
-    fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(AuthInterceptor())
+    fun provideOkHttpClient(apiKeyRepository: ApiKeyRepository): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(AuthInterceptor(apiKeyRepository))
         .build()
 
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-        .baseUrl("https://demo2407529.mockable.io")
+        .baseUrl("https://api.skybiometry.com/fc/")
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
