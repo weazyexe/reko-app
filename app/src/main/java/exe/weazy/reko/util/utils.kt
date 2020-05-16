@@ -6,6 +6,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.marginBottom
 import androidx.core.view.updatePadding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.leinardi.android.speeddial.SpeedDialView
 import exe.weazy.reko.util.extensions.updateMargin
 import kotlin.random.Random
 
@@ -14,7 +15,7 @@ fun handleBottomInsets(vararg views: View) {
     views.forEach { view ->
         val padding = view.paddingBottom
         ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
-            if (v is FloatingActionButton && Build.VERSION_CODES.Q <= Build.VERSION.SDK_INT) {
+            if ((v is FloatingActionButton || v is SpeedDialView) && Build.VERSION_CODES.Q <= Build.VERSION.SDK_INT) {
                 val tappable = insets.tappableElementInsets
                 v.updateMargin(
                     bottom = tappable.bottom + v.marginBottom

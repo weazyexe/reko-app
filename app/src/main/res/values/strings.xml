@@ -10,9 +10,8 @@
     <string name="field_can_not_be_empty">Field can not be empty</string>
     <string name="wrong_credentials">You entered wrong credentials. Try again</string>
 
-    <string name="feed">Распознанные лица</string>
-    <string name="recognize">Распознать</string>
-    <string name="settings">Настройки</string>
+    <string name="from_gallery">From gallery</string>
+    <string name="photo">Photo</string>
 
     <string name="no_recognized">Нет распознанных изображений</string>
     <string name="loading_error">Ошибка при загрузке данных</string>
