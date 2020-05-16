@@ -39,4 +39,9 @@ class ImageViewModel: ViewModel() {
             state.postValue(ScreenState.ERROR)
         })
     }
+
+    fun updateRecognized(recognized: Recognized) {
+        this.recognized.postValue(recognized)
+        state.postValue(ScreenState.SUCCESS)
+    }
 }

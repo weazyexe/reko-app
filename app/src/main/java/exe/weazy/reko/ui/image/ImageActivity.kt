@@ -13,6 +13,7 @@ import exe.weazy.reko.state.ScreenState
 import exe.weazy.reko.util.extensions.toTitleCase
 import exe.weazy.reko.util.extensions.useViewModel
 import exe.weazy.reko.util.values.IMAGE_PATH
+import exe.weazy.reko.util.values.RECOGNIZED_KEY
 import kotlinx.android.synthetic.main.activity_image.*
 import org.ocpsoft.prettytime.PrettyTime
 
@@ -30,9 +31,15 @@ class ImageActivity : AppCompatActivity() {
         viewModel = useViewModel(this, ImageViewModel::class.java)
 
         val path = intent.getParcelableExtra<Uri>(IMAGE_PATH)
+        val recognized = intent.getParcelableExtra<Recognized>(RECOGNIZED_KEY)
+
         if (path != null) {
             showImage(path)
             viewModel.recognize(path)
+        } else if (recognized != null) {
+            viewModel.updateRecognized(recognized)
+            showImage(Uri.parse(recognized.image))
+            showRecognized(recognized)
         }
 
         initObservers()
