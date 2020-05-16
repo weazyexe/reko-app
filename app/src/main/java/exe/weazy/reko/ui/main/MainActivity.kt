@@ -89,6 +89,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.update()
+    }
+
     private fun initObservers() {
         viewModel.state.observe(this, Observer {
             setState(it)
