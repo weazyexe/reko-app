@@ -1,4 +1,4 @@
-package exe.weazy.reko.ui.main.feed
+package exe.weazy.reko.ui.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,13 +9,15 @@ import exe.weazy.reko.state.ScreenState
 import exe.weazy.reko.util.extensions.subscribe
 import javax.inject.Inject
 
-class FeedViewModel : ViewModel() {
+class MainViewModel : ViewModel() {
 
     @Inject
     lateinit var repository: RecognizedRepository
 
     val state = MutableLiveData(ScreenState.DEFAULT)
     val recognized = MutableLiveData(listOf<Recognized>())
+
+    var errorMessage: String? = null
 
     init {
         App.getComponent().inject(this)
@@ -31,6 +33,7 @@ class FeedViewModel : ViewModel() {
                 state.postValue(ScreenState.SUCCESS)
             }
         }, {
+            errorMessage = it.message
             state.postValue(ScreenState.ERROR)
         })
     }

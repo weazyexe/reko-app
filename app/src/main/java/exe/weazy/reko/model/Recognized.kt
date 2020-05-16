@@ -6,5 +6,6 @@ data class Recognized(
     val id: String,
     val image: String,
     val date: Date,
+    val recognizer: RecognizerName,
     val emotions: Map<String, Int>
 )

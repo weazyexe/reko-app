@@ -1,5 +1,6 @@
 package exe.weazy.reko.recycler
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,9 +42,10 @@ class RecognizedAdapter(
         private var dateTextView = view.findViewById<TextView>(R.id.dateTextView)
         private var root = view.findViewById<CardView>(R.id.rootViewRecognizedItem)
 
+        @SuppressLint("SetTextI18n")
         fun bind(recognized: Recognized) {
             emotionTextView.text = recognized.emotions.maxBy { it.value }?.key?.toTitleCase()
-            dateTextView.text = PrettyTime().format(recognized.date)
+            dateTextView.text = "${recognized.recognizer.name.toTitleCase()} • ${PrettyTime().format(recognized.date)}"
 
             Glide.with(imageView.context)
                 .load(recognized.image)

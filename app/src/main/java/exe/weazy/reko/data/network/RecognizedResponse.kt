@@ -2,6 +2,7 @@ package exe.weazy.reko.data.network
 
 import com.google.gson.annotations.SerializedName
 import exe.weazy.reko.model.Recognized
+import exe.weazy.reko.model.RecognizerName
 import java.util.*
 
 data class RecognizedResponse(
@@ -19,7 +20,8 @@ data class RecognizedResponse(
             id = photo.id,
             image = photo.url,
             date = Date(),
-            emotions = getEmotions(tag)
+            emotions = getEmotions(tag),
+            recognizer = RecognizerName.SKY_BIOMETRY
         )
     }
 
