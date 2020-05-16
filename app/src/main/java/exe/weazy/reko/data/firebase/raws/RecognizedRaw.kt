@@ -27,6 +27,6 @@ class RecognizedRaw {
         image = image,
         date = recognize_time.toDate(),
         emotions = emotions.map { Pair(it.name, it.value) }.toMap(),
-        recognizer = if (recognizer_name == "Local") RecognizerName.LOCAL else RecognizerName.SKY_BIOMETRY
+        recognizer = RecognizerName.valueOf(recognizer_name)
     )
 }

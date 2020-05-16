@@ -27,6 +27,7 @@ import exe.weazy.reko.util.getDefaultColor
 import exe.weazy.reko.util.handleBottomInsets
 import exe.weazy.reko.util.handleTopInsets
 import exe.weazy.reko.util.values.IMAGE_PATH
+import exe.weazy.reko.util.values.RECOGNIZED_KEY
 import exe.weazy.reko.util.values.REQUEST_GALLERY_CODE
 import exe.weazy.reko.util.values.REQUEST_READ_EXTERNAL_STORAGE_CODE
 import kotlinx.android.synthetic.main.activity_main.*
@@ -87,6 +88,11 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, R.string.no_required_permissions, Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.update()
     }
 
     private fun initObservers() {
@@ -177,7 +183,7 @@ class MainActivity : AppCompatActivity() {
             adapter.update(recognized)
         } else {
             adapter = RecognizedAdapter(recognized.toMutableList()) {
-                Toast.makeText(this, it.id, Toast.LENGTH_SHORT).show()
+                openImage(it)
             }
 
             recognizedRecyclerView.adapter = adapter
@@ -217,6 +223,12 @@ class MainActivity : AppCompatActivity() {
     private fun openImage(uri: Uri) {
         val intent = Intent(this, ImageActivity::class.java)
         intent.putExtra(IMAGE_PATH, uri)
+        startActivity(intent)
+    }
+
+    private fun openImage(recognized: Recognized) {
+        val intent = Intent(this, ImageActivity::class.java)
+        intent.putExtra(RECOGNIZED_KEY, recognized)
         startActivity(intent)
     }
 

@@ -3,6 +3,7 @@ package exe.weazy.reko.ui.image
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import exe.weazy.reko.data.RecognizedRepository
 import exe.weazy.reko.di.App
 import exe.weazy.reko.model.Recognized
 import exe.weazy.reko.recognizer.Recognizer
@@ -15,6 +16,9 @@ class ImageViewModel: ViewModel() {
     @Inject
     lateinit var recognizer: Recognizer
 
+    @Inject
+    lateinit var recognizedRepository: RecognizedRepository
+
     val state = MutableLiveData(ScreenState.DEFAULT)
     val recognized = MutableLiveData<Recognized>()
 
@@ -24,11 +28,20 @@ class ImageViewModel: ViewModel() {
 
     fun recognize(imageUri: Uri) {
         state.postValue(ScreenState.LOADING)
-        subscribe(recognizer.recognize(imageUri), {
+
+        val observable = recognizer.recognize(imageUri)
+            .flatMap { recognizedRepository.save(it) }
+
+        subscribe(observable, {
             recognized.postValue(it)
             state.postValue(ScreenState.SUCCESS)
         }, {
             state.postValue(ScreenState.ERROR)
         })
+    }
+
+    fun updateRecognized(recognized: Recognized) {
+        this.recognized.postValue(recognized)
+        state.postValue(ScreenState.SUCCESS)
     }
 }

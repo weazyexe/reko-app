@@ -43,6 +43,10 @@ class MainViewModel : ViewModel() {
         })
     }
 
+    fun update() {
+        recognized.postValue(recognizedRepository.recognized)
+    }
+
     fun getRecognizer(): RecognizerName = settingsRepository.getRecognizer()
 
     fun saveRecognizer(isSkyBiometryRecognizer: Boolean) {

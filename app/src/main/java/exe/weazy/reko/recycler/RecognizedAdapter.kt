@@ -45,7 +45,7 @@ class RecognizedAdapter(
         @SuppressLint("SetTextI18n")
         fun bind(recognized: Recognized) {
             emotionTextView.text = recognized.emotions.maxBy { it.value }?.key?.toTitleCase()
-            dateTextView.text = "${recognized.recognizer.name.toTitleCase()} • ${PrettyTime().format(recognized.date)}"
+            dateTextView.text = "${recognized.recognizer.name.replace("_", " ").toTitleCase()} • ${PrettyTime().format(recognized.date)}"
 
             Glide.with(imageView.context)
                 .load(recognized.image)

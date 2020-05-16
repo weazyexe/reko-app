@@ -28,8 +28,6 @@ class SkyBiometryRecognizer : Recognizer {
             file.name,
             RequestBody.create(null, file)
         )
-        /*val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
-        val body = MultipartBody.Part.createFormData("urls", file.name, requestFile);*/
 
         return networkService.recognize(filePart)
             .map { it.convert() }

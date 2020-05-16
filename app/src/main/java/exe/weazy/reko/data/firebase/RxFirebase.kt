@@ -96,6 +96,26 @@ object RxFirebase {
         }
     }
 
+    fun <T : Any> saveDocument(document: String, data: T): Observable<T> = Observable.create { emitter ->
+        val uid = auth.currentUser?.uid
+        if (uid == null) {
+            emitter.onError(Throwable("User id is null"))
+        } else {
+            firestore.document("$uid/$document").set(data)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        emitter.onNext(data)
+                        emitter.onComplete()
+                    } else {
+                        emitter.onError(it.exception ?: Throwable("Document saving request isn't successful"))
+                    }
+                }
+                .addOnCanceledListener {
+                    emitter.onError(Throwable("Document saving request was canceled"))
+                }
+        }
+    }
+
     fun uploadImage(imageUri: Uri) : Observable<String> = Observable.create { emitter ->
         val uid = auth.currentUser?.uid
         if (uid == null) {

@@ -17,8 +17,8 @@ data class RecognizedResponse(
         val tag = photo.tags.first()
 
         return Recognized(
-            id = photo.id,
-            image = photo.url,
+            id = photo.id.substring(0..7),
+            image = if (photo.url.contains("https://")) photo.url else photo.url.replace("http://", "https://"),
             date = Date(),
             emotions = getEmotions(tag),
             recognizer = RecognizerName.SKY_BIOMETRY
