@@ -72,11 +72,6 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun initListeners() {
-        switchButton.setOnClickListener {
-            isBackCamera = !isBackCamera
-            initCamera()
-        }
-
         photoButton.setOnClickListener {
             val filename = "${Date().time.toString(16)}.jpeg"
             val file = File(externalMediaDirs.first(), filename)

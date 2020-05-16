@@ -1,11 +1,16 @@
 package exe.weazy.reko.ui.main
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.PermissionChecker
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,11 +20,18 @@ import exe.weazy.reko.model.Recognized
 import exe.weazy.reko.model.RecognizerName
 import exe.weazy.reko.recycler.RecognizedAdapter
 import exe.weazy.reko.state.ScreenState
+import exe.weazy.reko.ui.camera.CameraActivity
+import exe.weazy.reko.ui.image.ImageActivity
 import exe.weazy.reko.util.extensions.useViewModel
 import exe.weazy.reko.util.getDefaultColor
 import exe.weazy.reko.util.handleBottomInsets
 import exe.weazy.reko.util.handleTopInsets
+import exe.weazy.reko.util.values.IMAGE_PATH
+import exe.weazy.reko.util.values.REQUEST_GALLERY_CODE
+import exe.weazy.reko.util.values.REQUEST_READ_EXTERNAL_STORAGE_CODE
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.File
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -47,6 +59,34 @@ class MainActivity : AppCompatActivity() {
 
         initObservers()
         initListeners()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            REQUEST_GALLERY_CODE -> {
+                if (data != null && data.data != null) {
+                    handleContent(data.data)
+                }
+            }
+            else -> {
+                Toast.makeText(this, "Wow", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when (requestCode) {
+            REQUEST_READ_EXTERNAL_STORAGE_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PermissionChecker.PERMISSION_GRANTED) {
+                    openImagePicker()
+                }
+            }
+            else -> {
+                Toast.makeText(this, R.string.no_required_permissions, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun initObservers() {
@@ -80,12 +120,12 @@ class MainActivity : AppCompatActivity() {
         speedDialView.setOnActionSelectedListener(SpeedDialView.OnActionSelectedListener { actionItem ->
             when (actionItem.id) {
                 R.id.fromGalleryButton -> {
-                    Toast.makeText(this, "From gallery", Toast.LENGTH_SHORT).show()
+                    pickAnImage()
                     speedDialView.close()
                     return@OnActionSelectedListener true
                 }
                 R.id.photoButton -> {
-                    Toast.makeText(this, "Photo", Toast.LENGTH_SHORT).show()
+                    openCamera()
                     speedDialView.close()
                     return@OnActionSelectedListener true
                 }
@@ -168,4 +208,49 @@ class MainActivity : AppCompatActivity() {
     private fun primaryColor() = getDefaultColor(this, R.attr.colorAccent)
 
     private fun whiteColor() = ContextCompat.getColor(this, R.color.colorWhite)
+
+    private fun openCamera() {
+        val intent = Intent(this, CameraActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun openImage(uri: Uri) {
+        val intent = Intent(this, ImageActivity::class.java)
+        intent.putExtra(IMAGE_PATH, uri)
+        startActivity(intent)
+    }
+
+    private fun handleContent(content: Uri?) {
+        // IT'S MAGIC 🌈
+        if (content != null) {
+            try {
+                val inputStream = contentResolver?.openInputStream(content)
+                val bytes = inputStream?.readBytes()
+                val file = File(filesDir, content.lastPathSegment ?: Date().time.toString())
+                file.writeBytes(bytes!!)
+                openImage(file.toUri())
+            } catch (e: Exception) {
+                Toast.makeText(this, e.message ?: "Error", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun openImagePicker() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        val mimeTypes = arrayOf("image/jpeg", "image/png")
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
+        startActivityForResult(intent, REQUEST_GALLERY_CODE)
+    }
+
+    private fun pickAnImage() {
+        if (hasStoragePermission()) {
+            openImagePicker()
+        } else {
+            requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_READ_EXTERNAL_STORAGE_CODE)
+        }
+    }
+
+    private fun hasStoragePermission()
+            = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PermissionChecker.PERMISSION_GRANTED
 }
