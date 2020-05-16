@@ -32,17 +32,4 @@
         <item name="startIconDrawable">@drawable/ic_check_circle_24dp</item>
     </style>
 
-    <style name="MemeCard" parent="CardView">
-        <item name="cardBackgroundColor">?android:colorAccent</item>
-        <item name="cardElevation">0dp</item>
-        <item name="android:layout_margin">8dp</item>
-        <item name="cornerRadius">8dp</item>
-    </style>
-
-    <style name="MemeCard.Title">
-        <item name="fontWeight">700</item>
-        <item name="android:layout_marginStart">8dp</item>
-        <item name="android:maxLines">1</item>
-    </style>
-
 </resources>

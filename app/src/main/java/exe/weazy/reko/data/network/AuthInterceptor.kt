@@ -3,7 +3,6 @@ package exe.weazy.reko.data.network
 import exe.weazy.reko.data.ApiKeyRepository
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
-import okhttp3.Request
 import okhttp3.Response
 
 class AuthInterceptor(private val apiKeyRepository: ApiKeyRepository) : Interceptor {

@@ -1,7 +1,7 @@
 package exe.weazy.reko.data
 
-import exe.weazy.reko.data.firebase.raws.RecognizedRaw
 import exe.weazy.reko.data.firebase.RxFirebase
+import exe.weazy.reko.data.firebase.raws.RecognizedRaw
 import exe.weazy.reko.model.Recognized
 import io.reactivex.Observable
 

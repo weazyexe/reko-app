@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 tools:text="a moments ago"
                 android:textSize="16sp"
-                android:textColor="@color/colorLightGrey"
+                android:textColor="@color/colorGray"
                 android:layout_marginHorizontal="16dp" />
 
             <TextView

@@ -16,11 +16,7 @@ class RecognizerModule {
             RecognizerName.SKY_BIOMETRY -> {
                 SkyBiometryRecognizer()
             }
-            RecognizerName.SKY_BIOMETRY -> {
-                // TODO: change to local
-                SkyBiometryRecognizer()
-            }
-            else -> {
+            RecognizerName.LOCAL -> {
                 // TODO: change to local
                 SkyBiometryRecognizer()
             }

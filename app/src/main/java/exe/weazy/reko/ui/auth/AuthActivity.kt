@@ -1,8 +1,8 @@
 package exe.weazy.reko.ui.auth
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import exe.weazy.reko.R
 import exe.weazy.reko.util.extensions.useViewModel

@@ -37,7 +37,7 @@
             android:id="@+id/dateTextView"
             tools:text="Moment ago"
             android:textSize="12sp"
-            android:textColor="@color/colorLightGrey"
+            android:textColor="@color/colorGray"
             android:layout_gravity="bottom"
             android:layout_marginHorizontal="8dp"
             android:layout_marginBottom="8dp"
