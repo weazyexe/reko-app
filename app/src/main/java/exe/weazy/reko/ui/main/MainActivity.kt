@@ -5,22 +5,28 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.leinardi.android.speeddial.SpeedDialView
 import exe.weazy.reko.R
 import exe.weazy.reko.model.Recognized
+import exe.weazy.reko.model.RecognizerName
 import exe.weazy.reko.recycler.RecognizedAdapter
 import exe.weazy.reko.state.ScreenState
 import exe.weazy.reko.util.extensions.useViewModel
+import exe.weazy.reko.util.getDefaultColor
 import exe.weazy.reko.util.handleBottomInsets
+import exe.weazy.reko.util.handleTopInsets
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var adapter: RecognizedAdapter
+
+    private var isSkyBiometryRecognizer = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,9 +37,13 @@ class MainActivity : AppCompatActivity() {
 
         speedDialView.inflate(R.menu.main_menu)
         handleBottomInsets(speedDialView)
+        handleTopInsets(recognizersBar)
 
         viewModel = useViewModel(this, MainViewModel::class.java)
         viewModel.fetch()
+
+        isSkyBiometryRecognizer = viewModel.getRecognizer() == RecognizerName.SKY_BIOMETRY
+        changeRecognizer()
 
         initObservers()
         initListeners()
@@ -53,6 +63,18 @@ class MainActivity : AppCompatActivity() {
         swipeRefreshLayout.setOnRefreshListener {
             viewModel.fetch()
             swipeRefreshLayout.isRefreshing = false
+        }
+
+        localCardView.setOnClickListener {
+            isSkyBiometryRecognizer = false
+            changeRecognizer()
+            viewModel.saveRecognizer(isSkyBiometryRecognizer)
+        }
+
+        skyBiometryCardView.setOnClickListener {
+            isSkyBiometryRecognizer = true
+            changeRecognizer()
+            viewModel.saveRecognizer(isSkyBiometryRecognizer)
         }
 
         speedDialView.setOnActionSelectedListener(SpeedDialView.OnActionSelectedListener { actionItem ->
@@ -122,4 +144,28 @@ class MainActivity : AppCompatActivity() {
             recognizedRecyclerView.layoutManager = LinearLayoutManager(this)
         }
     }
+
+    private fun changeRecognizer() {
+        if (isSkyBiometryRecognizer) {
+            localCardView.setCardBackgroundColor(whiteColor())
+            localTextView.setTextColor(primaryColor())
+            localIconImageView.setColorFilter(primaryColor())
+
+            skyBiometryCardView.setCardBackgroundColor(primaryColor())
+            skyBiometryTextView.setTextColor(whiteColor())
+            skyBiometryIconImageView.setColorFilter(whiteColor())
+        } else {
+            localCardView.setCardBackgroundColor(primaryColor())
+            localTextView.setTextColor(whiteColor())
+            localIconImageView.setColorFilter(whiteColor())
+
+            skyBiometryCardView.setCardBackgroundColor(whiteColor())
+            skyBiometryTextView.setTextColor(primaryColor())
+            skyBiometryIconImageView.setColorFilter(primaryColor())
+        }
+    }
+
+    private fun primaryColor() = getDefaultColor(this, R.attr.colorAccent)
+
+    private fun whiteColor() = ContextCompat.getColor(this, R.color.colorWhite)
 }

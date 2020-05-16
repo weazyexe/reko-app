@@ -1,6 +1,8 @@
 package exe.weazy.reko.util
 
+import android.content.Context
 import android.os.Build
+import android.util.TypedValue
 import android.view.View
 import androidx.core.view.ViewCompat
 import androidx.core.view.marginBottom
@@ -48,4 +50,10 @@ fun generateId(length: Int = 10): String {
         sb.append(symbols[Random.nextInt(symbols.length)])
     }
     return sb.toString()
+}
+
+fun getDefaultColor(context: Context, attrId: Int): Int {
+    val value = TypedValue()
+    context.theme.resolveAttribute(attrId, value, true)
+    return value.data
 }

@@ -20,4 +20,6 @@
     <string name="choose_from_gallery">Выбрать из галереи</string>
     <string name="no_required_permissions">Нет нужных разрешений</string>
     <string name="recognizing_error">Произошла ошибка при распознавании</string>
+    <string name="local">Local</string>
+    <string name="sky_biometry">Sky Biometry</string>
 </resources>
