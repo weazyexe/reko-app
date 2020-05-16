@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorViolet">#9E699F</color>
+    <color name="colorVioletDark">#6C496D</color>
+    <color name="colorGray">#777</color>
+
+
+
     <color name="colorBlue">#312F51</color>
     <color name="colorDarkBlue">#23213F</color>
     <color name="colorBlueVariant">#474575</color>

@@ -1,4 +1,4 @@
-package exe.weazy.reko.ui.login
+package exe.weazy.reko.ui.auth
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,7 +14,7 @@ import exe.weazy.reko.util.values.SKY_BIOMETRY_RECOGNIZER
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
-class LoginViewModel : ViewModel() {
+class AuthViewModel : ViewModel() {
 
     @Inject
     lateinit var authRepository: AuthRepository
@@ -26,8 +26,12 @@ class LoginViewModel : ViewModel() {
     lateinit var settingsRepository: SettingsRepository
 
     private lateinit var signInDisposable: Disposable
+    private lateinit var signUpDisposable: Disposable
 
-    val state = MutableLiveData(ScreenState.DEFAULT)
+    val signInState = MutableLiveData(ScreenState.DEFAULT)
+    val signUpState = MutableLiveData(ScreenState.DEFAULT)
+
+    var errorMessage: String? = null
 
     init {
         App.getComponent().inject(this)
@@ -35,13 +39,13 @@ class LoginViewModel : ViewModel() {
 
     fun checkAccount() {
         if (authRepository.isSignedIn()) {
-            state.postValue(ScreenState.SUCCESS)
+            signInState.postValue(ScreenState.SUCCESS)
         }
     }
 
     fun signIn(login: String, password: String) {
         if (validateLogin(login) && validatePassword(password)) {
-            state.postValue(ScreenState.LOADING)
+            signInState.postValue(ScreenState.LOADING)
 
             if (::signInDisposable.isInitialized) {
                 signInDisposable.dispose()
@@ -55,12 +59,40 @@ class LoginViewModel : ViewModel() {
                 apiKeyRepository.saveApplicationSecretKey(it.application_secret_key)
                 settingsRepository.saveRecognizer(SKY_BIOMETRY_RECOGNIZER)
 
-                state.postValue(ScreenState.SUCCESS)
+                signInState.postValue(ScreenState.SUCCESS)
             }, {
-                state.postValue(ScreenState.ERROR)
+                errorMessage = it.message
+                signInState.postValue(ScreenState.ERROR)
             })
         } else {
-            state.postValue(ScreenState.ERROR)
+            signInState.postValue(ScreenState.ERROR)
+        }
+    }
+
+    fun signUp(login: String, password: String, confirm: String) {
+        if (validateLogin(login) && validatePassword(password) && password == confirm) {
+            signUpState.postValue(ScreenState.LOADING)
+
+            if (::signUpDisposable.isInitialized) {
+                signUpDisposable.dispose()
+            }
+
+            val observable = authRepository.signUp(login, password)
+                .flatMap { apiKeyRepository.updateApiKeys() }
+
+            signUpDisposable = subscribe(observable, {
+                apiKeyRepository.saveApplicationKey(it.application_key)
+                apiKeyRepository.saveApplicationSecretKey(it.application_secret_key)
+                settingsRepository.saveRecognizer(SKY_BIOMETRY_RECOGNIZER)
+
+                signUpState.postValue(ScreenState.SUCCESS)
+            }, {
+                errorMessage = it.message
+                signUpState.postValue(ScreenState.ERROR)
+            })
+        } else {
+            errorMessage = "Passwords mismatch"
+            signUpState.postValue(ScreenState.ERROR)
         }
     }
 

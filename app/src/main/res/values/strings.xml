@@ -1,12 +1,14 @@
 <resources>
-    <string name="app_name">reko</string>
+    <string name="app_name">Reko</string>
 
-    <string name="login">Логин</string>
-    <string name="password">Пароль</string>
-    <string name="sign_in">Войти</string>
-    <string name="password_length">Пароль должен содержать 6 символов</string>
-    <string name="field_can_not_be_empty">Поле не может быть пустым</string>
-    <string name="wrong_credentials">Вы ввели неверные данные. Попробуйте ещё раз</string>
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="create_account">Create account</string>
+    <string name="sign_up">Sign up</string>
+    <string name="field_can_not_be_empty">Field can not be empty</string>
+    <string name="wrong_credentials">You entered wrong credentials. Try again</string>
 
     <string name="feed">Распознанные лица</string>
     <string name="recognize">Распознать</string>

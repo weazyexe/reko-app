@@ -7,18 +7,10 @@
     tools:context=".ui.main.MainActivity"
     android:id="@+id/rootViewMain">
 
-    <FrameLayout
-        android:id="@+id/fragmentLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNav"
-        app:menu="@menu/main_menu"
-        app:backgroundTint="?android:colorPrimaryDark"
-        app:labelVisibilityMode="unlabeled"
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"/>
+        android:text="Main"
+        android:layout_gravity="center"/>
 
 </FrameLayout>

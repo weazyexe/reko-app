@@ -1,6 +1,6 @@
 package exe.weazy.reko.util.extensions
 
-import android.app.Activity
+import android.content.Context
 import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
 import androidx.core.view.marginBottom
@@ -11,10 +11,17 @@ import com.google.android.material.snackbar.Snackbar
 import exe.weazy.reko.R
 
 
-fun Activity.showErrorSnackbar(stringRes: Int, view: View) {
+fun showErrorSnackbar(context: Context, stringRes: Int, view: View) {
     val snackbar = Snackbar.make(view, stringRes, Snackbar.LENGTH_LONG)
-    snackbar.setBackgroundTint(getColor(R.color.colorRed))
-    snackbar.setTextColor(getColor(R.color.colorWhite))
+    snackbar.setBackgroundTint(context.getColor(R.color.colorRed))
+    snackbar.setTextColor(context.getColor(R.color.colorWhite))
+    snackbar.show()
+}
+
+fun showErrorSnackbar(context: Context, str: String, view: View) {
+    val snackbar = Snackbar.make(view, str, Snackbar.LENGTH_LONG)
+    snackbar.setBackgroundTint(context.getColor(R.color.colorRed))
+    snackbar.setTextColor(context.getColor(R.color.colorWhite))
     snackbar.show()
 }
 
