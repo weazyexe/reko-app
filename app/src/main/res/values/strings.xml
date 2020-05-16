@@ -1,22 +1,23 @@
 <resources>
-    <string name="app_name">reko</string>
+    <string name="app_name">Reko</string>
 
-    <string name="login">Логин</string>
-    <string name="password">Пароль</string>
-    <string name="sign_in">Войти</string>
-    <string name="password_length">Пароль должен содержать 6 символов</string>
-    <string name="field_can_not_be_empty">Поле не может быть пустым</string>
-    <string name="wrong_credentials">Вы ввели неверные данные. Попробуйте ещё раз</string>
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="create_account">Create account</string>
+    <string name="sign_up">Sign up</string>
+    <string name="field_can_not_be_empty">Field can not be empty</string>
+    <string name="wrong_credentials">You entered wrong credentials. Try again</string>
 
-    <string name="feed">Распознанные лица</string>
-    <string name="recognize">Распознать</string>
-    <string name="settings">Настройки</string>
+    <string name="from_gallery">From gallery</string>
+    <string name="photo">Photo</string>
 
-    <string name="no_recognized">Нет распознанных изображений</string>
-    <string name="loading_error">Ошибка при загрузке данных</string>
-    <string name="recognized_image">Распознанное изображение</string>
-    <string name="make_a_photo">Сделать фото</string>
-    <string name="choose_from_gallery">Выбрать из галереи</string>
-    <string name="no_required_permissions">Нет нужных разрешений</string>
-    <string name="recognizing_error">Произошла ошибка при распознавании</string>
+    <string name="no_recognized">Wow. Such empty. Wanna some recognize?</string>
+    <string name="loading_error">Loading error</string>
+    <string name="recognized_image">Recognized image</string>
+    <string name="no_required_permissions">No required permissions</string>
+    <string name="recognizing_error">Recognizing error. Faces not found or file is broken.</string>
+    <string name="local">Local</string>
+    <string name="sky_biometry">Sky Biometry</string>
 </resources>

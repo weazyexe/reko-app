@@ -9,5 +9,7 @@ class AuthRepository {
 
     fun signIn(email: String, password: String) = RxFirebase.signIn(email, password)
 
+    fun signUp(email: String, password: String) = RxFirebase.signUp(email, password)
+
     fun isSignedIn() = auth.currentUser != null
 }

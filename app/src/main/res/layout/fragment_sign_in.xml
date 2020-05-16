@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.login.LoginActivity"
-    android:id="@+id/rootViewLogin"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:id="@+id/rootViewSignIn">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -17,54 +14,73 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/loginEditTextLayout"
-            style="@style/TextField"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            style="@style/TextField.Email"
             android:layout_marginBottom="16dp"
-            android:hint="@string/login">
+            android:hint="@string/email">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/loginEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:textColor="@color/colorWhite" />
+                android:inputType="textEmailAddress"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/passwordEditTextLayout"
-            style="@style/TextField.Password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/TextField.Password"
             android:hint="@string/password">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passwordEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:textColor="@color/colorWhite" />
+                android:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/signInButton"
-        style="@style/Button.Primary"
+    <LinearLayout
+        android:id="@+id/buttonsLayout"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:text="@string/sign_in"
-        android:layout_gravity="bottom"/>
-
-    <ProgressBar
-        android:id="@+id/loadingBar"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:elevation="8dp"
-        android:layout_marginBottom="8dp"/>
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/signInButton"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:text="@string/sign_in" />
+
+            <ProgressBar
+                android:id="@+id/loadingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:elevation="8dp"
+                android:indeterminateTint="@color/colorWhite"
+                android:layout_marginBottom="8dp"/>
+
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/createAccountButton"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:text="@string/create_account" />
+
+    </LinearLayout>
 
 </FrameLayout>

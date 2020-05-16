@@ -1,54 +1,58 @@
-package exe.weazy.reko.ui.login
+package exe.weazy.reko.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
-import android.telephony.PhoneNumberFormattingTextWatcher
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import exe.weazy.reko.R
 import exe.weazy.reko.state.ScreenState
 import exe.weazy.reko.ui.main.MainActivity
 import exe.weazy.reko.util.extensions.showErrorSnackbar
 import exe.weazy.reko.util.extensions.useViewModel
-import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.fragment_sign_in.*
 
-class LoginActivity : AppCompatActivity() {
+class SignInFragment : Fragment() {
 
-    private lateinit var viewModel: LoginViewModel
+    private lateinit var viewModel: AuthViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.AppTheme)
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_sign_in, container, false)
+    }
 
-        viewModel = useViewModel(this, LoginViewModel::class.java)
-        viewModel.checkAccount()
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
-        initObservers()
+        viewModel = useViewModel(requireActivity(), AuthViewModel::class.java)
+
         initListeners()
+        initObservers()
     }
 
     private fun initListeners() {
-        passwordEditText.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                passwordEditTextLayout.helperText = getString(R.string.password_length)
+        loginEditText.addTextChangedListener {
+            if (!viewModel.validateLogin(it.toString())) {
+                loginEditTextLayout.error = getString(R.string.field_can_not_be_empty)
             } else {
-                passwordEditTextLayout.helperText = ""
+                loginEditTextLayout.error = ""
             }
         }
 
-        loginEditText.addTextChangedListener(object : PhoneNumberFormattingTextWatcher() {
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                super.onTextChanged(s, start, before, count)
-                if (!viewModel.validateLogin(s.toString())) {
-                    loginEditTextLayout.error = getString(R.string.field_can_not_be_empty)
-                } else {
-                    loginEditTextLayout.error = ""
-                }
+        passwordEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                viewModel.signIn(
+                    login = loginEditText.text.toString(),
+                    password = passwordEditText.text.toString()
+                )
             }
-        })
+
+            false
+        }
 
         passwordEditText.addTextChangedListener {
             if (!viewModel.validatePassword(it.toString())) {
@@ -67,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initObservers() {
-        viewModel.state.observe(this, Observer {
+        viewModel.signInState.observe(requireActivity(), Observer {
             setState(it)
         })
     }
@@ -75,14 +79,20 @@ class LoginActivity : AppCompatActivity() {
     private fun setState(state: ScreenState) {
         when(state) {
             ScreenState.DEFAULT, ScreenState.EMPTY -> {
+                linearLayout.isVisible = false
+                buttonsLayout.isVisible = false
                 makeButtonLoading(false)
             }
             ScreenState.LOADING -> {
+                linearLayout.isVisible = true
+                buttonsLayout.isVisible = true
                 makeButtonLoading(true)
             }
             ScreenState.ERROR -> {
+                linearLayout.isVisible = true
+                buttonsLayout.isVisible = true
                 makeButtonLoading(false)
-                showErrorSnackbar(R.string.wrong_credentials, rootViewLogin)
+                showErrorSnackbar(requireContext(), viewModel.errorMessage ?: getString(R.string.wrong_credentials), rootViewSignIn)
             }
             ScreenState.SUCCESS -> {
                 openMainScreen()
@@ -91,9 +101,9 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun openMainScreen() {
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(requireActivity(), MainActivity::class.java)
         startActivity(intent)
-        finish()
+        requireActivity().finish()
     }
 
     private fun makeButtonLoading(isLoading: Boolean) {

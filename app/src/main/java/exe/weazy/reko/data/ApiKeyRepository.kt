@@ -4,11 +4,11 @@ import android.content.Context
 import android.content.SharedPreferences
 import exe.weazy.reko.data.firebase.RxFirebase
 import exe.weazy.reko.data.prefs.PreferenceHelper
+import exe.weazy.reko.data.prefs.PreferenceHelper.get
+import exe.weazy.reko.data.prefs.PreferenceHelper.set
 import exe.weazy.reko.util.values.APPLICATION_KEY
 import exe.weazy.reko.util.values.APPLICATION_SECRET_KEY
 import exe.weazy.reko.util.values.EMPTY_STRING
-import exe.weazy.reko.data.prefs.PreferenceHelper.get
-import exe.weazy.reko.data.prefs.PreferenceHelper.set
 
 class ApiKeyRepository(context: Context) {
 

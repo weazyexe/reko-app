@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/feedButton"
-        android:title="@string/feed"
-        android:icon="@drawable/ic_filter_blue_24dp"/>
+        android:id="@+id/fromGalleryButton"
+        android:title="@string/from_gallery"
+        android:icon="@drawable/ic_folder_white_24dp"/>
 
     <item
-        android:id="@+id/recognizeButton"
-        android:title="@string/recognize"
-        android:icon="@drawable/ic_whatshot_blue_24dp"/>
-
-    <item
-        android:id="@+id/settingsButton"
-        android:title="@string/settings"
-        android:icon="@drawable/ic_settings_blue_24dp"/>
+        android:id="@+id/photoButton"
+        android:title="@string/photo"
+        android:icon="@drawable/ic_photo_camera_white_24dp"/>
 </menu>

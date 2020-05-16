@@ -25,10 +25,30 @@ object RxFirebase {
                         emitter.onNext(user)
                         emitter.onComplete()
                     } else {
-                        emitter.onError(Throwable("User is null"))
+                        emitter.onError(it.exception ?: Throwable("User is null"))
                     }
                 } else {
-                    emitter.onError(Throwable("Request isn't successful"))
+                    emitter.onError(it.exception ?: Throwable("Request isn't successful"))
+                }
+            }
+            .addOnCanceledListener {
+                emitter.onError(Throwable("Request was cancelled"))
+            }
+    }
+
+    fun signUp(email: String, password: String): Observable<FirebaseUser> = Observable.create { emitter ->
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    val user = it.result?.user
+                    if (user != null) {
+                        emitter.onNext(user)
+                        emitter.onComplete()
+                    } else {
+                        emitter.onError(it.exception ?: Throwable("User is null"))
+                    }
+                } else {
+                    emitter.onError(it.exception ?: Throwable("Request isn't successful"))
                 }
             }
             .addOnCanceledListener {
@@ -41,8 +61,9 @@ object RxFirebase {
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     emitter.onNext(it.result?.toObject(ApiKeysRaw::class.java) ?: throw Throwable("Result is null"))
+                    emitter.onComplete()
                 } else {
-                    emitter.onError(Throwable("Request isn't successful"))
+                    emitter.onError(it.exception ?: Throwable("Request isn't successful"))
                 }
             }
             .addOnCanceledListener {
@@ -63,10 +84,10 @@ object RxFirebase {
                             emitter.onNext(docs)
                             emitter.onComplete()
                         } else {
-                            emitter.onError(Throwable("Request is successful but documents are null"))
+                            emitter.onError(it.exception ?: Throwable("Request is successful but documents are null"))
                         }
                     } else {
-                        emitter.onError(Throwable("Request isn't successful"))
+                        emitter.onError(it.exception ?: Throwable("Request isn't successful"))
                     }
                 }
                 .addOnCanceledListener {
@@ -91,14 +112,14 @@ object RxFirebase {
                                     emitter.onNext(it.result.toString())
                                     emitter.onComplete()
                                 } else {
-                                    emitter.onError(Throwable("Download URL request isn't successful"))
+                                    emitter.onError(it.exception ?: Throwable("Download URL request isn't successful"))
                                 }
                             }
                             .addOnCanceledListener {
                                 emitter.onError(Throwable("Download URL was cancelled"))
                             }
                     } else {
-                        emitter.onError(Throwable("Put file request isn't successful"))
+                        emitter.onError(loadTask.exception ?: Throwable("Put file request isn't successful"))
                     }
                 }
                 .addOnCanceledListener {
