@@ -16,6 +16,7 @@ class App : Application() {
         component = DaggerAppComponent.builder()
             .networkModule(NetworkModule())
             .repositoryModule(RepositoryModule(applicationContext))
+            .recognizerModule(RecognizerModule(applicationContext))
             .build()
     }
 }

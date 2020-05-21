@@ -22,6 +22,8 @@ class ImageViewModel: ViewModel() {
     val state = MutableLiveData(ScreenState.DEFAULT)
     val recognized = MutableLiveData<Recognized>()
 
+    var errorMessage: String? = ""
+
     init {
         App.getComponent().inject(this)
     }
@@ -36,6 +38,7 @@ class ImageViewModel: ViewModel() {
             recognized.postValue(it)
             state.postValue(ScreenState.SUCCESS)
         }, {
+            errorMessage = it.message
             state.postValue(ScreenState.ERROR)
         })
     }
