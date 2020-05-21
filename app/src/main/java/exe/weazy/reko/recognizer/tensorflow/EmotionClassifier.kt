@@ -4,7 +4,9 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.PointF
 import android.media.FaceDetector
-import androidx.core.graphics.get
+import exe.weazy.reko.util.extensions.pixelColor
+import exe.weazy.reko.util.extensions.resetConfig
+import exe.weazy.reko.util.extensions.toBlackWhite
 import exe.weazy.reko.util.getEmotion
 import org.tensorflow.lite.Interpreter
 import java.io.File
@@ -13,9 +15,9 @@ import java.io.File
 // Входной тип данных в модель [n, 48, 48, 1]
 // Поэтому тут происходит вот такое:
 typealias InputType = Array<Pixels>
-typealias OutputType = Array<Array<Float>>
+typealias OutputType = Array<FloatArray?>
 
-typealias Pixels = MutableList<Array<Array<Float>>>
+typealias Pixels = Array<Array<FloatArray>>
 
 class EmotionClassifier(context: Context) {
 
@@ -24,6 +26,9 @@ class EmotionClassifier(context: Context) {
     private val modelPath = "model.tflite"
     private val model = Interpreter(loadModelFile(context))
 
+    /**
+     * Классифицирует эмоции лица на изображении
+     */
     fun classify(bitmap: Bitmap): Map<String, Int>? {
         val faces = getFaces(bitmap = bitmap)
         if (faces.isNotEmpty()) {
@@ -32,19 +37,27 @@ class EmotionClassifier(context: Context) {
                 startFacePoint.x.toInt(), startFacePoint.y.toInt(), width, height)
 
             val input = prepareData(croppedBitmap)
-            val output: OutputType = arrayOf()
+            val output: OutputType = Array(1) {
+                return@Array FloatArray(7) {
+                    return@FloatArray 0f
+                }
+            }
             model.run(input, output)
 
+            // Преобразуем вывод из нейросети в нормальный вид
             if (output.isNotEmpty()) {
-                return output[0].mapIndexed { index, it ->
+                return output[0]?.mapIndexed { index, it ->
                     getEmotion(index) to (it * 100).toInt()
-                }.toMap()
+                }?.filter { it.second != 0 }?.toMap()
             }
         }
 
         return null
     }
 
+    /**
+     * Загружает модель из ассетов приложения, сохраняет и возвращает файл модели
+     */
     private fun loadModelFile(context: Context): File {
         val inputStream = context.assets.open(modelPath)
         val readBytes = inputStream.readBytes()
@@ -55,14 +68,23 @@ class EmotionClassifier(context: Context) {
         return file
     }
 
+    /**
+     * Распознает лицо на изображении
+     */
     private fun getFaces(bitmap: Bitmap): Array<FaceDetector.Face> {
         // Распознаем одно лицо
-        val faceDetector = FaceDetector(bitmap.width, bitmap.height, 2)
-        val faces: Array<FaceDetector.Face> = arrayOf()
-        faceDetector.findFaces(bitmap, faces) // faces - out параметр, в нем результат
-        return faces
+        val image = bitmap.resetConfig(Bitmap.Config.RGB_565)
+        val faceDetector = FaceDetector(image.width, image.height, 1)
+        val faces: Array<FaceDetector.Face?> = Array(1) {
+            return@Array null
+        }
+        faceDetector.findFaces(image, faces) // faces - out параметр, в нем результат
+        return faces.filterNotNull().toTypedArray()
     }
 
+    /**
+     * Найти точку, от которой начинается прямоугольник с лицом (левый верхний угол)
+     */
     private fun getStartPoint(face: FaceDetector.Face): PointF {
         val midFacePoint = PointF(0f ,0f)
         face.getMidPoint(midFacePoint)
@@ -71,15 +93,21 @@ class EmotionClassifier(context: Context) {
         return PointF(midFacePoint.x - 24, midFacePoint.y - 24)
     }
 
+    /**
+     * Преобразование изображения в понятный для модели вид
+     */
     private fun prepareData(bitmap: Bitmap): InputType {
-        val image: Pixels = mutableListOf()
+        val image: MutableList<Array<FloatArray>> = mutableListOf()
         for (y in 0 until height) {
-            val row = mutableListOf<Array<Float>>()
+            val row = mutableListOf<FloatArray>()
             for (x in 0 until width) {
-                row.add(arrayOf(bitmap[x, y].toFloat()))
+                val value = bitmap.pixelColor(x, y).toBlackWhite().red()
+                row.add(FloatArray(1) {
+                    return@FloatArray value
+                })
             }
             image.add(row.toTypedArray())
         }
-        return arrayOf(image)
+        return arrayOf(image.toTypedArray())
     }
 }
