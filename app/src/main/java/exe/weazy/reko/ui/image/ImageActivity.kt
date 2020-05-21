@@ -69,6 +69,8 @@ class ImageActivity : AppCompatActivity() {
                 errorLayout.isVisible = true
                 progressLayout.isVisible = false
                 infoLayout.isVisible = false
+
+                errorLayout.text = "${getString(R.string.recognizing_error)}\n ${viewModel.errorMessage}"
             }
             ScreenState.SUCCESS -> {
                 errorLayout.isVisible = false

@@ -24,6 +24,14 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a'
+        }
+    }
+
+    aaptOptions {
+        noCompress "tflite"
     }
 
     buildTypes {
@@ -87,4 +95,9 @@ dependencies {
 
     // FAB Speed Dial
     implementation "com.leinardi.android:speed-dial:3.1.1"
+
+    // TensorFlow Lite
+    implementation 'org.tensorflow:tensorflow-lite:0.0.0-nightly'
+    implementation 'org.tensorflow:tensorflow-lite-gpu:0.0.0-nightly'
+    implementation 'org.tensorflow:tensorflow-lite-support:0.0.0-nightly'
 }
