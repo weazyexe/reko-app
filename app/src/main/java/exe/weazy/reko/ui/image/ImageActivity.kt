@@ -12,6 +12,7 @@ import exe.weazy.reko.model.Recognized
 import exe.weazy.reko.state.ScreenState
 import exe.weazy.reko.util.extensions.toTitleCase
 import exe.weazy.reko.util.extensions.useViewModel
+import exe.weazy.reko.util.handleBottomInsets
 import exe.weazy.reko.util.values.IMAGE_PATH
 import exe.weazy.reko.util.values.RECOGNIZED_KEY
 import kotlinx.android.synthetic.main.activity_image.*
@@ -29,6 +30,7 @@ class ImageActivity : AppCompatActivity() {
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 
         viewModel = useViewModel(this, ImageViewModel::class.java)
+        handleBottomInsets(true, otherEmotionsTextView)
 
         val path = intent.getParcelableExtra<Uri>(IMAGE_PATH)
         val recognized = intent.getParcelableExtra<Recognized>(RECOGNIZED_KEY)

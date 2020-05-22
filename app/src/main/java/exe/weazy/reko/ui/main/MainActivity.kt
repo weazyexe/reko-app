@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 
         speedDialView.inflate(R.menu.main_menu)
-        handleBottomInsets(speedDialView)
+        handleBottomInsets(true, speedDialView, recognizedRecyclerView)
         handleTopInsets(recognizersBar)
 
         viewModel = useViewModel(this, MainViewModel::class.java)

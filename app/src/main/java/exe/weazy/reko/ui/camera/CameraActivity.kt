@@ -20,6 +20,7 @@ import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import exe.weazy.reko.R
 import exe.weazy.reko.ui.image.ImageActivity
+import exe.weazy.reko.util.handleBottomInsets
 import exe.weazy.reko.util.values.IMAGE_PATH
 import exe.weazy.reko.util.values.REQUEST_CAMERA_CODE
 import kotlinx.android.synthetic.main.activity_camera.*
@@ -42,6 +43,8 @@ class CameraActivity : AppCompatActivity() {
 
         rootViewCamera.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+
+        handleBottomInsets(true, photoButton)
 
         init()
     }

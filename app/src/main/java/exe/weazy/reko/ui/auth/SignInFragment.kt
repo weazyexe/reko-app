@@ -15,6 +15,7 @@ import exe.weazy.reko.state.ScreenState
 import exe.weazy.reko.ui.main.MainActivity
 import exe.weazy.reko.util.extensions.showErrorSnackbar
 import exe.weazy.reko.util.extensions.useViewModel
+import exe.weazy.reko.util.handleBottomInsets
 import kotlinx.android.synthetic.main.fragment_sign_in.*
 
 class SignInFragment : Fragment() {
@@ -29,6 +30,8 @@ class SignInFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewModel = useViewModel(requireActivity(), AuthViewModel::class.java)
+
+        handleBottomInsets(false, createAccountButton)
 
         initListeners()
         initObservers()

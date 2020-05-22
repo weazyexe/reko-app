@@ -13,9 +13,9 @@ import exe.weazy.reko.util.extensions.updateMargin
 import kotlin.random.Random
 
 
-fun handleBottomInsets(vararg views: View) {
+fun handleBottomInsets(isPadding: Boolean = true, vararg views: View) {
     views.forEach { view ->
-        val padding = view.paddingBottom
+        val distance = if (isPadding) view.paddingBottom else view.marginBottom
         ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
             if ((v is FloatingActionButton || v is SpeedDialView) && Build.VERSION_CODES.Q <= Build.VERSION.SDK_INT) {
                 val tappable = insets.tappableElementInsets
@@ -23,7 +23,11 @@ fun handleBottomInsets(vararg views: View) {
                     bottom = tappable.bottom + v.marginBottom
                 )
             } else {
-                v.updatePadding(bottom = padding + insets.systemWindowInsetBottom)
+                if (isPadding) {
+                    v.updatePadding(bottom = distance + insets.systemWindowInsetBottom)
+                } else {
+                    v.updateMargin(bottom = distance + insets.systemWindowInsetBottom)
+                }
             }
 
             insets
