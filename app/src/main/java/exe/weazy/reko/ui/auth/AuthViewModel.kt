@@ -28,7 +28,7 @@ class AuthViewModel : ViewModel() {
     private lateinit var signInDisposable: Disposable
     private lateinit var signUpDisposable: Disposable
 
-    val signInState = MutableLiveData(ScreenState.DEFAULT)
+    val signInState = MutableLiveData(ScreenState.EMPTY)
     val signUpState = MutableLiveData(ScreenState.DEFAULT)
 
     var errorMessage: String? = null
@@ -40,6 +40,8 @@ class AuthViewModel : ViewModel() {
     fun checkAccount() {
         if (authRepository.isSignedIn()) {
             signInState.postValue(ScreenState.SUCCESS)
+        } else {
+            signInState.postValue(ScreenState.DEFAULT)
         }
     }
 

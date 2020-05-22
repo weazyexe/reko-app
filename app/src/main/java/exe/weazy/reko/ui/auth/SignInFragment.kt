@@ -78,7 +78,12 @@ class SignInFragment : Fragment() {
 
     private fun setState(state: ScreenState) {
         when(state) {
-            ScreenState.DEFAULT, ScreenState.EMPTY -> {
+            ScreenState.DEFAULT -> {
+                linearLayout.isVisible = true
+                buttonsLayout.isVisible = true
+                makeButtonLoading(false)
+            }
+            ScreenState.EMPTY -> {
                 linearLayout.isVisible = false
                 buttonsLayout.isVisible = false
                 makeButtonLoading(false)
