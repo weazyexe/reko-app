@@ -20,12 +20,11 @@ import exe.weazy.reko.model.Recognized
 import exe.weazy.reko.model.RecognizerName
 import exe.weazy.reko.recycler.RecognizedAdapter
 import exe.weazy.reko.state.ScreenState
+import exe.weazy.reko.ui.InsetsHelper
 import exe.weazy.reko.ui.camera.CameraActivity
 import exe.weazy.reko.ui.image.ImageActivity
 import exe.weazy.reko.util.extensions.useViewModel
 import exe.weazy.reko.util.getDefaultColor
-import exe.weazy.reko.util.handleBottomInsets
-import exe.weazy.reko.util.handleTopInsets
 import exe.weazy.reko.util.values.IMAGE_PATH
 import exe.weazy.reko.util.values.RECOGNIZED_KEY
 import exe.weazy.reko.util.values.REQUEST_GALLERY_CODE
@@ -49,8 +48,8 @@ class MainActivity : AppCompatActivity() {
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 
         speedDialView.inflate(R.menu.main_menu)
-        handleBottomInsets(true, speedDialView, recognizedRecyclerView)
-        handleTopInsets(recognizersBar)
+        InsetsHelper.handleBottom(true, speedDialView, recognizedRecyclerView)
+        InsetsHelper.handleTop(true, recognizersBar)
 
         viewModel = useViewModel(this, MainViewModel::class.java)
         viewModel.fetch()
