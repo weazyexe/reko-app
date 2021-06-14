@@ -5,19 +5,22 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import dev.weazyexe.reko.screen.AuthScreen
+import dev.weazyexe.reko.screen.MainScreen
 import dev.weazyexe.reko.ui.theme.RekoTheme
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             RekoTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Android")
+                    Root()
                 }
             }
         }
@@ -25,14 +28,19 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
+fun Root() {
+    val navController = rememberNavController()
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    RekoTheme {
-        Greeting("Android")
+    val navigateTo = fun(destination: String) {
+        navController.navigate(destination)
+    }
+
+    val back = fun() {
+        navController.popBackStack()
+    }
+
+    NavHost(navController = navController, startDestination = AUTH_SCREEN) {
+        composable(AUTH_SCREEN) { AuthScreen(navigateTo) }
+        composable(MAIN_SCREEN) { MainScreen(navigateTo, back) }
     }
 }
