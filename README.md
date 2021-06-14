@@ -1,3 +1,5 @@
+![Reko header](./img/reko.jpg)
+
 # Reko
 
 Emotion recognition Android application. My graduate work 👨‍🎓
