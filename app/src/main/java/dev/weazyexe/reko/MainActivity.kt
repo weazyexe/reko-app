@@ -9,8 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import dev.weazyexe.reko.screen.AuthScreen
-import dev.weazyexe.reko.screen.MainScreen
+import dev.weazyexe.reko.screen.auth.AuthScreen
+import dev.weazyexe.reko.screen.main.MainScreen
 import dev.weazyexe.reko.ui.theme.RekoTheme
 
 class MainActivity : ComponentActivity() {

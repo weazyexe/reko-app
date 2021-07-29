@@ -1,4 +1,4 @@
-package dev.weazyexe.reko.screen
+package dev.weazyexe.reko.screen.main
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Button

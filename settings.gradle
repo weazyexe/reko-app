@@ -1,2 +1,3 @@
 rootProject.name='reko-app'
 include ':app'
+include ':core'
