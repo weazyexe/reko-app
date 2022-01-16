@@ -1,19 +1,15 @@
 package dev.weazyexe.reko
 
 import android.os.Bundle
-import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ProvideWindowInsets
 import dagger.hilt.android.AndroidEntryPoint
-import dev.weazyexe.core.utils.extensions.adjustResizeViaInsets
 import dev.weazyexe.core.utils.extensions.makeEdgeToEdge
 import dev.weazyexe.reko.ui.screen.auth.AuthScreen
 import dev.weazyexe.reko.ui.screen.main.MainScreen
@@ -25,7 +21,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         makeEdgeToEdge()
-        adjustResizeViaInsets()
 
         setContent {
             RekoTheme {

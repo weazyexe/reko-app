@@ -3,4 +3,10 @@
     <string name="auth_email_text">E-mail</string>
     <string name="auth_password_text">Password</string>
     <string name="auth_sign_in_text">Sign in</string>
+    <string name="auth_sign_up_text">Create account</string>
+
+    <string name="auth_app_name_title">Reko 🕵️‍♂️</string>
+    <string name="auth_app_description_text">
+        The application can recognize human facial emotions on your photo 📸\nSign in or create account to proceed
+    </string>
 </resources>
