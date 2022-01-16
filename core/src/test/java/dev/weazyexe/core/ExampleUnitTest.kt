@@ -1,4 +1,4 @@
-package dev.weazyexe.reko.core
+package dev.weazyexe.core
 
 import org.junit.Test
 

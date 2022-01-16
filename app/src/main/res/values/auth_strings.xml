@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="auth_email_text">E-mail</string>
+    <string name="auth_password_text">Password</string>
+    <string name="auth_sign_in_text">Sign in</string>
+</resources>
