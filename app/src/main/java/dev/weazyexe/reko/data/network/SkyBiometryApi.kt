@@ -1,4 +1,4 @@
-package dev.weazyexe.reko.network
+package dev.weazyexe.reko.data.network
 
 /**
  * Retrofit API for SkyBiometry service

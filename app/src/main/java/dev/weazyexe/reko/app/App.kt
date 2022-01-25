@@ -1,4 +1,4 @@
-package dev.weazyexe.reko
+package dev.weazyexe.reko.app
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

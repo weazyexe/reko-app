@@ -1,4 +1,4 @@
-package dev.weazyexe.reko.network.di
+package dev.weazyexe.reko.data.di
 
 import android.content.Context
 import dagger.Module
@@ -6,7 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dev.weazyexe.reko.network.SkyBiometryApi
+import dev.weazyexe.reko.data.network.SkyBiometryApi
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
