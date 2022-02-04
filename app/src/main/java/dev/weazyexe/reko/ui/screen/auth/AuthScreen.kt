@@ -37,8 +37,8 @@ fun AuthScreen(
         isLoading = state.signInLoadState.isLoading,
         emailError = state.emailError.orEmpty(),
         passwordError = state.passwordError.orEmpty(),
-        onEmailChanged = { authViewModel.emit(OnEmailChange(it)) },
-        onPasswordChanged = { authViewModel.emit(OnPasswordChange(it)) },
+        onEmailChange = { authViewModel.emit(OnEmailChange(it)) },
+        onPasswordChange = { authViewModel.emit(OnPasswordChange(it)) },
         onSignInClick = { authViewModel.emit(AuthAction.OnSignInClick) },
         onSignUpClick = { }
     )

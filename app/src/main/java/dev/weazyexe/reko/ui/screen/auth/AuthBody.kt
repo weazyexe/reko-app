@@ -39,8 +39,8 @@ fun AuthBody(
     emailError: String = EMPTY_STRING,
     passwordError: String = EMPTY_STRING,
     isLoading: Boolean = false,
-    onEmailChanged: (String) -> Unit = {},
-    onPasswordChanged: (String) -> Unit = {},
+    onEmailChange: (String) -> Unit = {},
+    onPasswordChange: (String) -> Unit = {},
     onSignInClick: () -> Unit = {},
     onSignUpClick: () -> Unit = {}
 ) {
@@ -80,7 +80,7 @@ fun AuthBody(
                     .padding(bottom = 8.dp, top = 32.dp),
                 value = email,
                 hint = stringResource(id = R.string.auth_email_text),
-                onValueChange = { onEmailChanged(it) },
+                onValueChange = { onEmailChange(it) },
                 errorMessage = emailError,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
@@ -96,7 +96,7 @@ fun AuthBody(
                     .focusRequester(passwordFocusRequester),
                 value = password,
                 hint = stringResource(id = R.string.auth_password_text),
-                onValueChange = { onPasswordChanged(it) },
+                onValueChange = { onPasswordChange(it) },
                 errorMessage = passwordError,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(
