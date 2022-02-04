@@ -83,15 +83,12 @@ class AuthViewModel @Inject constructor(
                 state.copy(signInLoadState = LoadState.data(Unit)).emit()
                 GoToMainScreen.emit()
             },
-            onError = ::handleSignInError
+            onError = {
+                state.copy(
+                    signInLoadState = LoadState.error(it),
+                    passwordError = sp.string(mapError(it).message)
+                ).emit()
+            }
         )
-    }
-
-    private suspend fun handleSignInError(exception: Exception) {
-        val errorMessage = mapError(exception).message
-        state.copy(
-            signInLoadState = LoadState.error(exception),
-            passwordError = sp.string(errorMessage)
-        ).emit()
     }
 }

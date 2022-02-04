@@ -1,5 +1,6 @@
 package dev.weazyexe.reko.ui.common.error
 
+import com.google.firebase.FirebaseNetworkException
 import dev.weazyexe.reko.ui.common.error.ResponseError.*
 import java.net.ConnectException
 import java.net.UnknownHostException
@@ -13,7 +14,8 @@ interface ErrorMapper {
     fun mapError(exception: Exception): ResponseError =
         when (exception) {
             is UnknownHostException,
-            is ConnectException -> NoInternetError()
+            is ConnectException,
+            is FirebaseNetworkException -> NoInternetError()
             is TimeoutException -> TimeoutError()
             else -> UnknownError()
         }

@@ -24,7 +24,7 @@ fun AuthScreen(
 
     ReceiveEffect(effectState) {
         when (this) {
-            AuthEffect.GoToMainScreen -> navigateTo(MAIN_SCREEN)
+            is AuthEffect.GoToMainScreen -> navigateTo(MAIN_SCREEN)
             else -> {
                 // Do nothing
             }
