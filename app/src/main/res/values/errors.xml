@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_no_internet">There is no Internet connection, please try again</string>
+    <string name="error_timed_out">Request was timed out, please try again</string>
+    <string name="error_unknown">Something went wrong, please try again</string>
+    <string name="error_user_does_not_exist">Wrong e-mail or password</string>
+</resources>

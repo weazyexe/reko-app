@@ -12,6 +12,5 @@
     <string name="auth_email_is_empty_error_text">E-mail can not be empty</string>
     <string name="auth_email_is_incorrect_error_text">Incorrect e-mail</string>
     <string name="auth_password_is_empty_error_text">Password can not be empty</string>
-    <string name="auth_wrong_credentials_error_text">Wrong e-mail or password</string>
     <string name="auth_unknown_error_text">Unknown error, please try later</string>
 </resources>

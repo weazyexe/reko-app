@@ -6,6 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Базовая [ViewModel] для всех экранов приложения
@@ -36,6 +37,19 @@ abstract class CoreViewModel<S : State, E : Effect, A : Action> : ViewModel() {
     }
 
     abstract suspend fun handleAction(action: A)
+
+    protected suspend fun <T> query(
+        query: suspend () -> T,
+        onSuccess: suspend (T) -> Unit,
+        onError: suspend (Exception) -> Unit
+    ) = viewModelScope.launch(Dispatchers.Main) {
+        try {
+            val result = withContext(Dispatchers.IO) { query() }
+            onSuccess(result)
+        } catch (e: Exception) {
+            onError(e)
+        }
+    }
 
     /**
      * Триггер сайд-эффекта
