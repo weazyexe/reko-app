@@ -28,9 +28,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         makeEdgeToEdge()
-        val splashScreen = installSplashScreen()
+        installSplashScreen()
         val hasUser = appViewModel.checkUser()
-        splashScreen.setKeepOnScreenCondition { !hasUser }
 
         setContent {
             RekoTheme {
