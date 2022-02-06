@@ -19,8 +19,8 @@ abstract class CoreViewModel<S : State, E : Effect, A : Action> : ViewModel() {
     protected val state: S
         get() = uiState.value
 
-    private val _effects = Channel<E>(Channel.BUFFERED)
-    val effects: Flow<E>
+    private val _effects = Channel<E?>(Channel.BUFFERED)
+    val effects: Flow<E?>
         get() = _effects.receiveAsFlow()
 
     private val actions = Channel<E>(Channel.BUFFERED)

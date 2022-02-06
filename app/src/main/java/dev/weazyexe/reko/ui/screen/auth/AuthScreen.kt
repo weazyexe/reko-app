@@ -11,7 +11,6 @@ import dev.weazyexe.core.utils.ReceiveEffect
 import dev.weazyexe.reko.MAIN_SCREEN
 import dev.weazyexe.reko.ui.screen.auth.AuthAction.OnEmailChange
 import dev.weazyexe.reko.ui.screen.auth.AuthAction.OnPasswordChange
-import dev.weazyexe.reko.ui.screen.auth.AuthEffect.Initial
 import dev.weazyexe.reko.ui.theme.RekoTheme
 
 @Composable
@@ -20,7 +19,7 @@ fun AuthScreen(
     authViewModel: AuthViewModel = hiltViewModel()
 ) {
     val state by authViewModel.uiState.collectAsState()
-    val effectState = authViewModel.effects.collectAsState(Initial)
+    val effectState = authViewModel.effects.collectAsState(null)
 
     ReceiveEffect(effectState) {
         when (this) {

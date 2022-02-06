@@ -5,7 +5,7 @@ import androidx.annotation.StringRes
 
 class StringsProvider(private val context: Context) {
 
-    fun string(@StringRes resId: Int): String {
+    fun getString(@StringRes resId: Int): String {
         return context.getString(resId)
     }
 }

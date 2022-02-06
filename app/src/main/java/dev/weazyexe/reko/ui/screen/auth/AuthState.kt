@@ -16,7 +16,6 @@ data class AuthState(
 
 sealed class AuthEffect : Effect {
 
-    object Initial : AuthEffect()
     object GoToMainScreen : AuthEffect()
 }
 

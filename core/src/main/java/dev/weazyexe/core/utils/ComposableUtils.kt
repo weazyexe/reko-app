@@ -6,7 +6,7 @@ import androidx.compose.runtime.State
 import dev.weazyexe.core.ui.Effect
 
 @Composable
-fun <E : Effect> ReceiveEffect(effectState: State<E>, block: E.() -> Unit) {
+fun <E : Effect?> ReceiveEffect(effectState: State<E>, block: E.() -> Unit) {
     LaunchedEffect(effectState.value) {
         block(effectState.value)
     }
