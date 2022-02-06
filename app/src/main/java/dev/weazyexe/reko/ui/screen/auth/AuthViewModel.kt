@@ -5,8 +5,7 @@ import dev.weazyexe.core.ui.CoreViewModel
 import dev.weazyexe.core.ui.LoadState
 import dev.weazyexe.core.utils.providers.StringsProvider
 import dev.weazyexe.reko.data.repository.FirebaseAuthRepository
-import dev.weazyexe.reko.ui.screen.auth.AuthAction.OnEmailChange
-import dev.weazyexe.reko.ui.screen.auth.AuthAction.OnPasswordChange
+import dev.weazyexe.reko.ui.screen.auth.AuthAction.*
 import dev.weazyexe.reko.ui.screen.auth.AuthEffect.GoToMainScreen
 import dev.weazyexe.reko.ui.screen.auth.error.AuthErrorMapper
 import dev.weazyexe.reko.ui.screen.auth.validator.EmailValidator
@@ -25,6 +24,7 @@ class AuthViewModel @Inject constructor(
 
     override suspend fun handleAction(action: AuthAction) {
         when (action) {
+            is CheckUser -> checkUser()
             is OnEmailChange -> state.copy(
                 email = action.email,
                 emailError = null
@@ -33,7 +33,13 @@ class AuthViewModel @Inject constructor(
                 password = action.password,
                 passwordError = null
             ).emit()
-            is AuthAction.OnSignInClick -> onSignInClick()
+            is OnSignInClick -> onSignInClick()
+        }
+    }
+
+    private fun checkUser() {
+        if (firebaseAuthRepository.checkUser()) {
+            GoToMainScreen.emit()
         }
     }
 

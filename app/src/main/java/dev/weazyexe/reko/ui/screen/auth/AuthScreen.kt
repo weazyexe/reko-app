@@ -2,6 +2,7 @@ package dev.weazyexe.reko.ui.screen.auth
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Devices
@@ -9,8 +10,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.weazyexe.core.ui.Route
 import dev.weazyexe.core.utils.ReceiveEffect
-import dev.weazyexe.reko.ui.screen.auth.AuthAction.OnEmailChange
-import dev.weazyexe.reko.ui.screen.auth.AuthAction.OnPasswordChange
+import dev.weazyexe.reko.ui.screen.auth.AuthAction.*
 import dev.weazyexe.reko.ui.screen.main.MainRoute
 import dev.weazyexe.reko.ui.theme.RekoTheme
 
@@ -21,6 +21,10 @@ fun AuthScreen(
 ) {
     val state by authViewModel.uiState.collectAsState()
     val effectState = authViewModel.effects.collectAsState(null)
+
+    LaunchedEffect(Unit) {
+        authViewModel.emit(CheckUser)
+    }
 
     ReceiveEffect(effectState) {
         when (this) {
@@ -39,7 +43,7 @@ fun AuthScreen(
         passwordError = state.passwordError.orEmpty(),
         onEmailChange = { authViewModel.emit(OnEmailChange(it)) },
         onPasswordChange = { authViewModel.emit(OnPasswordChange(it)) },
-        onSignInClick = { authViewModel.emit(AuthAction.OnSignInClick) },
+        onSignInClick = { authViewModel.emit(OnSignInClick) },
         onSignUpClick = { }
     )
 }
