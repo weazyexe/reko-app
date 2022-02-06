@@ -26,7 +26,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import dev.weazyexe.core.utils.EMPTY_STRING
 import dev.weazyexe.reko.R
-import dev.weazyexe.reko.ui.theme.Typography
+import dev.weazyexe.reko.ui.theme.AppTypography
 
 @Composable
 fun RekoTextField(
@@ -103,7 +103,7 @@ fun RekoTextField(
                 modifier = Modifier.padding(start = 16.dp, top = 4.dp),
                 text = errorMessage,
                 color = MaterialTheme.colorScheme.error,
-                style = Typography.labelMedium
+                style = AppTypography.labelMedium
             )
         }
     }

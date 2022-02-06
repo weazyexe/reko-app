@@ -27,8 +27,8 @@ import com.google.accompanist.insets.statusBarsPadding
 import dev.weazyexe.core.utils.EMPTY_STRING
 import dev.weazyexe.reko.R
 import dev.weazyexe.reko.ui.common.components.RekoTextField
+import dev.weazyexe.reko.ui.theme.AppTypography
 import dev.weazyexe.reko.ui.theme.RekoTheme
-import dev.weazyexe.reko.ui.theme.Typography
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -61,7 +61,7 @@ fun AuthBody(
                     .fillMaxWidth()
                     .padding(top = 48.dp, bottom = 16.dp),
                 text = stringResource(id = R.string.auth_app_name_title),
-                style = Typography.displaySmall,
+                style = AppTypography.displaySmall,
                 fontWeight = FontWeight.Bold
             )
 
@@ -70,7 +70,7 @@ fun AuthBody(
                     .fillMaxWidth()
                     .padding(),
                 text = stringResource(id = R.string.auth_app_description_text),
-                style = Typography.bodyLarge
+                style = AppTypography.bodyLarge
             )
 
             RekoTextField(

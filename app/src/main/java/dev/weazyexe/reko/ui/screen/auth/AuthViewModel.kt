@@ -24,7 +24,6 @@ class AuthViewModel @Inject constructor(
 
     override suspend fun handleAction(action: AuthAction) {
         when (action) {
-            is CheckUser -> checkUser()
             is OnEmailChange -> state.copy(
                 email = action.email,
                 emailError = null
@@ -34,12 +33,6 @@ class AuthViewModel @Inject constructor(
                 passwordError = null
             ).emit()
             is OnSignInClick -> onSignInClick()
-        }
-    }
-
-    private fun checkUser() {
-        if (firebaseAuthRepository.checkUser()) {
-            GoToMainScreen.emit()
         }
     }
 

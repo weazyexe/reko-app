@@ -2,7 +2,6 @@ package dev.weazyexe.reko.ui.screen.auth
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Devices
@@ -21,10 +20,6 @@ fun AuthScreen(
 ) {
     val state by authViewModel.uiState.collectAsState()
     val effectState = authViewModel.effects.collectAsState(null)
-
-    LaunchedEffect(Unit) {
-        authViewModel.emit(CheckUser)
-    }
 
     ReceiveEffect(effectState) {
         when (this) {

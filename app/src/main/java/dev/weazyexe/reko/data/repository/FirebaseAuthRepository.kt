@@ -6,11 +6,14 @@ import dev.weazyexe.reko.data.error.UserDoesNotExistException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Repository for interaction with Firebase Authentication
  */
-class FirebaseAuthRepository {
+@Singleton
+class FirebaseAuthRepository @Inject constructor() {
 
     private val auth by lazy { FirebaseAuth.getInstance() }
 

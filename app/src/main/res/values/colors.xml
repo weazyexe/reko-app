@@ -6,4 +6,7 @@
 
     <color name="colorRed">#FF575D</color>
     <color name="colorWhite">#FFF</color>
+
+    <color name="colorPrimaryContainer">#001f24</color>
+    <color name="colorOnPrimaryContainer">#95f0ff</color>
 </resources>

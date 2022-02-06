@@ -35,11 +35,6 @@ sealed class AuthEffect : Effect {
 sealed class AuthAction : Action {
 
     /**
-     * Check for user presence
-     */
-    object CheckUser : AuthAction()
-
-    /**
      * On sign in button click action
      */
     object OnSignInClick : AuthAction()
