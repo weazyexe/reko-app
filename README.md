@@ -4,14 +4,31 @@
 
 Emotion recognition Android application. My graduate work 👨‍🎓
 
+I wanted to recreate this app with new technology stack, so here we are! If you want to check my original graduate work then please check `v1` branch.
+
 ## Stack
 
+- Jetpack Compose
+- Jetpack SplashScreen
+- Jetpack Navigation
+- Kotlin Coroutines
+- Hilt
+- Accompanist
+- Material You
 - TensorFlow Lite
-- CameraX
-- RxJava 2
-- Dagger 2
 - Retrofit
-- Firebase
+- Firebase (Auth + Firestore)
+
+## Features
+
+- Sign in with e-mail/password via Firebase Auth
+- Sign up via Firebase Auth
+- Recognize human facial emotions with local recognizer (trained TensorFlow model)
+- Recognize emotions with SkyBiometry API
+
+## Screenshots
+
+TODO
 
 ## Emotion recognition
 
