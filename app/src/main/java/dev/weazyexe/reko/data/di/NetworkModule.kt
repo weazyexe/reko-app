@@ -1,10 +1,8 @@
 package dev.weazyexe.reko.data.di
 
-import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.weazyexe.reko.data.network.SkyBiometryApi
 import retrofit2.Retrofit
@@ -16,7 +14,7 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(@ApplicationContext context: Context): Retrofit =
+    fun provideRetrofit(): Retrofit =
         Retrofit.Builder()
             .build()
 
