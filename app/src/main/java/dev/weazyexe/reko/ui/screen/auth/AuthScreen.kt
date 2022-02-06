@@ -7,15 +7,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import dev.weazyexe.core.ui.Route
 import dev.weazyexe.core.utils.ReceiveEffect
-import dev.weazyexe.reko.MAIN_SCREEN
 import dev.weazyexe.reko.ui.screen.auth.AuthAction.OnEmailChange
 import dev.weazyexe.reko.ui.screen.auth.AuthAction.OnPasswordChange
+import dev.weazyexe.reko.ui.screen.main.MainRoute
 import dev.weazyexe.reko.ui.theme.RekoTheme
 
 @Composable
 fun AuthScreen(
-    navigateTo: (String) -> Unit = {},
+    navigateTo: (Route) -> Unit = {},
     authViewModel: AuthViewModel = hiltViewModel()
 ) {
     val state by authViewModel.uiState.collectAsState()
@@ -23,7 +24,7 @@ fun AuthScreen(
 
     ReceiveEffect(effectState) {
         when (this) {
-            is AuthEffect.GoToMainScreen -> navigateTo(MAIN_SCREEN)
+            is AuthEffect.GoToMainScreen -> navigateTo(MainRoute())
             else -> {
                 // Do nothing
             }

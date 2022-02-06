@@ -19,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,7 +26,7 @@ import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.google.accompanist.insets.statusBarsPadding
 import dev.weazyexe.core.utils.EMPTY_STRING
 import dev.weazyexe.reko.R
-import dev.weazyexe.reko.ui.common.RekoTextField
+import dev.weazyexe.reko.ui.common.components.RekoTextField
 import dev.weazyexe.reko.ui.theme.RekoTheme
 import dev.weazyexe.reko.ui.theme.Typography
 
@@ -98,14 +97,14 @@ fun AuthBody(
                 hint = stringResource(id = R.string.auth_password_text),
                 onValueChange = { onPasswordChange(it) },
                 errorMessage = passwordError,
-                visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Password,
                     imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions(
                     onDone = { onSignInClick() }
-                )
+                ),
+                hasTogglePasswordButton = true
             )
         }
 

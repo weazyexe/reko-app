@@ -10,8 +10,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ProvideWindowInsets
 import dagger.hilt.android.AndroidEntryPoint
+import dev.weazyexe.core.ui.Route
 import dev.weazyexe.core.utils.extensions.makeEdgeToEdge
+import dev.weazyexe.reko.ui.screen.auth.AuthRoute
 import dev.weazyexe.reko.ui.screen.auth.AuthScreen
+import dev.weazyexe.reko.ui.screen.main.MainRoute
 import dev.weazyexe.reko.ui.screen.main.MainScreen
 import dev.weazyexe.reko.ui.theme.RekoTheme
 
@@ -38,16 +41,17 @@ class MainActivity : ComponentActivity() {
 fun Root() {
     val navController = rememberNavController()
 
-    val navigateTo = fun(destination: String) {
-        navController.navigate(destination)
+    val navigateTo = fun(route: Route) {
+        navController.navigate(route.path)
     }
 
     val back = fun() {
         navController.popBackStack()
     }
 
-    NavHost(navController = navController, startDestination = AUTH_SCREEN) {
-        composable(AUTH_SCREEN) { AuthScreen(navigateTo) }
-        composable(MAIN_SCREEN) { MainScreen(navigateTo, back) }
+    val authRoute = AuthRoute()
+    NavHost(navController = navController, startDestination = authRoute.path) {
+        composable(authRoute.path) { AuthScreen(navigateTo) }
+        composable(MainRoute().path) { MainScreen(navigateTo, back) }
     }
 }
