@@ -19,9 +19,9 @@ fun AuthScreen(
     authViewModel: AuthViewModel = hiltViewModel()
 ) {
     val state by authViewModel.uiState.collectAsState()
-    val effectState = authViewModel.effects.collectAsState(null)
+    val effects by authViewModel.effects.collectAsState(null)
 
-    ReceiveEffect(effectState) {
+    ReceiveEffect(effects) {
         when (this) {
             is AuthEffect.GoToMainScreen -> navigateTo(MainRoute())
             else -> {

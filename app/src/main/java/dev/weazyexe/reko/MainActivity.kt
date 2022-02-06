@@ -64,6 +64,6 @@ fun Root(initialRoute: Route) {
 
     NavHost(navController = navController, startDestination = initialRoute.path) {
         composable(AuthRoute().path) { AuthScreen(navigateTo) }
-        composable(MainRoute().path) { MainScreen(navigateTo, back) }
+        composable(MainRoute().path) { MainScreen(navigateTo) }
     }
 }

@@ -2,4 +2,13 @@
 <resources>
     <string name="content_description_password_eye_visible">Password hide button (visible now)</string>
     <string name="content_description_password_eye_hidden">Password hide button (hidden now)</string>
+    <string name="content_description_recognize_emotions_button">Recognize button</string>
+
+    <string name="emotion_anger">Anger 😠</string>
+    <string name="emotion_disgust">Disgust 🤢</string>
+    <string name="emotion_happiness">Happiness 😜</string>
+    <string name="emotion_fear">Fear 😱</string>
+    <string name="emotion_sadness">Sadness 😞</string>
+    <string name="emotion_surprise">Surprise 😲</string>
+    <string name="emotion_unknown">Unrecognized emotion 🥺</string>
 </resources>

@@ -1,31 +1,42 @@
 package dev.weazyexe.reko.ui.screen.main
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Button
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import dev.weazyexe.core.ui.Route
+import dev.weazyexe.core.utils.ReceiveEffect
+import dev.weazyexe.reko.ui.screen.main.MainAction.OnRecognizeClick
 import dev.weazyexe.reko.ui.theme.RekoTheme
 
+/**
+ * Main screen with feed
+ */
 @Composable
 fun MainScreen(
-    navigateTo: (Route) -> Unit = {},
-    goBack: () -> Unit = {}
+    navigateTo: (Route) -> Unit = {}
 ) {
-    Column {
-        Text(text = "main")
-        Button(onClick = { goBack() }) {
-            Text(text = "back to auth")
-        }
+    val mainViewModel = hiltViewModel<MainViewModel>()
+
+    val state by mainViewModel.uiState.collectAsState()
+    val effects by mainViewModel.effects.collectAsState(null)
+
+    ReceiveEffect(effects) {
+        // TODO handle effects
     }
+
+    MainBody(
+        imagesLoadState = state.imagesLoadState,
+        onRecognizeClick = { mainViewModel.emit(OnRecognizeClick) }
+    )
 }
 
 @Preview(showBackground = true, device = Devices.PIXEL_4)
 @Composable
 fun MainPreview() {
     RekoTheme {
-        MainScreen()
+        MainBody()
     }
 }
