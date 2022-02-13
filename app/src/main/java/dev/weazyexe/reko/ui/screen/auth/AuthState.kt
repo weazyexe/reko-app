@@ -27,6 +27,11 @@ sealed class AuthEffect : Effect {
      * Navigation to [MainScreen]
      */
     object GoToMainScreen : AuthEffect()
+
+    /**
+     * Show message in snackbar side effect
+     */
+    data class ShowMessage(val message: String) : AuthEffect()
 }
 
 /**

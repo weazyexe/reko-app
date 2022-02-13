@@ -5,10 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -27,10 +24,11 @@ import com.google.accompanist.insets.statusBarsPadding
 import dev.weazyexe.core.utils.EMPTY_STRING
 import dev.weazyexe.reko.R
 import dev.weazyexe.reko.ui.common.components.RekoTextField
+import dev.weazyexe.reko.ui.common.components.snackbar.ErrorSnackbar
 import dev.weazyexe.reko.ui.theme.AppTypography
 import dev.weazyexe.reko.ui.theme.RekoTheme
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun AuthBody(
     email: String = EMPTY_STRING,
@@ -38,6 +36,7 @@ fun AuthBody(
     emailError: String = EMPTY_STRING,
     passwordError: String = EMPTY_STRING,
     isLoading: Boolean = false,
+    snackbarHostState: SnackbarHostState? = null,
     onEmailChange: (String) -> Unit = {},
     onPasswordChange: (String) -> Unit = {},
     onSignInClick: () -> Unit = {},
@@ -147,6 +146,15 @@ fun AuthBody(
             ) {
                 Text(text = stringResource(id = R.string.auth_sign_up_text))
             }
+        }
+
+        snackbarHostState?.also { hostState ->
+            ErrorSnackbar(
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .align(Alignment.TopCenter),
+                snackbarHostState = hostState
+            )
         }
     }
 }

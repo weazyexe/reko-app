@@ -8,13 +8,13 @@ import java.net.UnknownHostException
  * Базовое состояние загрузки данных
  *
  * @property data загруженные данные
- * @property error [Exception], брошенная при загрузке
+ * @property error [Throwable], брошенная при загрузке
  * @property isLoading состояние загрузки
  * @property isSwipeRefresh состояние загрузки через свайп
  */
 data class LoadState<T>(
     val data: T? = null,
-    val error: Exception? = null,
+    val error: Throwable? = null,
     val isLoading: Boolean = false,
     val isSwipeRefresh: Boolean = false
 ) : Serializable {
@@ -39,7 +39,7 @@ data class LoadState<T>(
          * Создать [LoadState] в состоянии ошибки
          */
         fun <T> error(
-            e: Exception,
+            e: Throwable,
             oldData: T? = null
         ): LoadState<T> =
             LoadState(

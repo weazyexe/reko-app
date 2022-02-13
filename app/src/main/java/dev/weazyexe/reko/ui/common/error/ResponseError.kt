@@ -23,4 +23,8 @@ sealed class ResponseError(@StringRes open val message: Int) {
     class WrongCredentialsError(
         override val message: Int = R.string.error_user_does_not_exist
     ) : ResponseError(message)
+
+    class TooManyRequestsError(
+        override val message: Int = R.string.error_too_many_requests
+    ) : ResponseError(message)
 }

@@ -9,7 +9,7 @@ class MainViewModel : CoreViewModel<MainState, MainEffect, MainAction>() {
 
     override val initialState: MainState = MainState()
 
-    override suspend fun handleAction(action: MainAction) {
+    override suspend fun onAction(action: MainAction) {
 
     }
 

@@ -21,9 +21,8 @@ fun MainScreen(
     val mainViewModel = hiltViewModel<MainViewModel>()
 
     val state by mainViewModel.uiState.collectAsState()
-    val effects by mainViewModel.effects.collectAsState(null)
 
-    ReceiveEffect(effects) {
+    ReceiveEffect(mainViewModel.effects) {
         // TODO handle effects
     }
 

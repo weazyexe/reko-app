@@ -3,6 +3,7 @@
     <string name="content_description_password_eye_visible">Password hide button (visible now)</string>
     <string name="content_description_password_eye_hidden">Password hide button (hidden now)</string>
     <string name="content_description_recognize_emotions_button">Recognize button</string>
+    <string name="content_description_snackbar_icon">Snackbar icon</string>
 
     <string name="emotion_anger">Anger 😠</string>
     <string name="emotion_disgust">Disgust 🤢</string>

@@ -12,11 +12,11 @@ import dev.weazyexe.reko.ui.common.error.ResponseError.WrongCredentialsError
  */
 interface AuthErrorMapper : ErrorMapper {
 
-    override fun mapError(exception: Exception): ResponseError =
-        when (exception) {
+    override fun mapError(throwable: Throwable): ResponseError =
+        when (throwable) {
             is FirebaseAuthInvalidUserException,
             is FirebaseAuthInvalidCredentialsException,
             is UserDoesNotExistException -> WrongCredentialsError()
-            else -> super.mapError(exception)
+            else -> super.mapError(throwable)
         }
 }

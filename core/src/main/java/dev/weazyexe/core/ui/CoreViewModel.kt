@@ -6,7 +6,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * Базовая [ViewModel] для всех экранов приложения
@@ -19,8 +18,8 @@ abstract class CoreViewModel<S : State, E : Effect, A : Action> : ViewModel() {
     protected val state: S
         get() = uiState.value
 
-    private val _effects = Channel<E?>(Channel.BUFFERED)
-    val effects: Flow<E?>
+    private val _effects = Channel<E>(Channel.BUFFERED)
+    val effects: Flow<E>
         get() = _effects.receiveAsFlow()
 
     private val actions = Channel<E>(Channel.BUFFERED)
@@ -32,24 +31,11 @@ abstract class CoreViewModel<S : State, E : Effect, A : Action> : ViewModel() {
 
     fun emit(action: A) {
         viewModelScope.launch(Dispatchers.Main) {
-            handleAction(action)
+            onAction(action)
         }
     }
 
-    abstract suspend fun handleAction(action: A)
-
-    protected suspend fun <T> query(
-        query: suspend () -> T,
-        onSuccess: suspend (T) -> Unit,
-        onError: suspend (Exception) -> Unit
-    ) = viewModelScope.launch(Dispatchers.Main) {
-        try {
-            val result = withContext(Dispatchers.IO) { query() }
-            onSuccess(result)
-        } catch (e: Exception) {
-            onError(e)
-        }
-    }
+    protected abstract suspend fun onAction(action: A)
 
     /**
      * Триггер сайд-эффекта

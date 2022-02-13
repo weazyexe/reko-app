@@ -5,11 +5,17 @@ import dev.weazyexe.core.ui.CoreViewModel
 import dev.weazyexe.core.ui.LoadState
 import dev.weazyexe.core.utils.providers.StringsProvider
 import dev.weazyexe.reko.data.repository.FirebaseAuthRepository
+import dev.weazyexe.reko.ui.common.error.ResponseError
 import dev.weazyexe.reko.ui.screen.auth.AuthAction.*
 import dev.weazyexe.reko.ui.screen.auth.AuthEffect.GoToMainScreen
 import dev.weazyexe.reko.ui.screen.auth.error.AuthErrorMapper
 import dev.weazyexe.reko.ui.screen.auth.validator.EmailValidator
 import dev.weazyexe.reko.ui.screen.auth.validator.PasswordValidator
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,7 +28,7 @@ class AuthViewModel @Inject constructor(
 
     override val initialState: AuthState = AuthState()
 
-    override suspend fun handleAction(action: AuthAction) {
+    override suspend fun onAction(action: AuthAction) {
         when (action) {
             is OnEmailChange -> state.copy(
                 email = action.email,
@@ -63,18 +69,27 @@ class AuthViewModel @Inject constructor(
 
     private suspend fun signIn(email: String, password: String) {
         state.copy(signInLoadState = LoadState.loading()).emit()
-        query(
-            query = { firebaseAuthRepository.signIn(email, password) },
-            onSuccess = {
+        firebaseAuthRepository.signIn(email, password)
+            .flowOn(Dispatchers.IO)
+            .onEach {
                 state.copy(signInLoadState = LoadState.data(Unit)).emit()
                 GoToMainScreen.emit()
-            },
-            onError = {
-                state.copy(
-                    signInLoadState = LoadState.error(it),
-                    passwordError = stringsProvider.getString(mapError(it).message)
-                ).emit()
             }
-        )
+            .catch {
+                val error = mapError(it)
+                val message = stringsProvider.getString(error.message)
+
+                if (error is ResponseError.WrongCredentialsError) {
+                    state.copy(
+                        signInLoadState = LoadState.error(it),
+                        passwordError = message
+                    ).emit()
+                } else {
+                    state.copy(signInLoadState = LoadState.error(it)).emit()
+                    AuthEffect.ShowMessage(message).emit()
+                }
+
+            }
+            .collect()
     }
 }
