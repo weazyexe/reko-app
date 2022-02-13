@@ -1,16 +1,14 @@
 package dev.weazyexe.core.ui
 
 import java.io.Serializable
-import java.net.ConnectException
-import java.net.UnknownHostException
 
 /**
- * Базовое состояние загрузки данных
+ * Loading state for data
  *
- * @property data загруженные данные
- * @property error [Throwable], брошенная при загрузке
- * @property isLoading состояние загрузки
- * @property isSwipeRefresh состояние загрузки через свайп
+ * @property data loaded data
+ * @property error error what was thrown during the loading
+ * @property isLoading loading state
+ * @property isSwipeRefresh is loading was launched from swipe refresh
  */
 data class LoadState<T>(
     val data: T? = null,
@@ -22,7 +20,7 @@ data class LoadState<T>(
     companion object {
 
         /**
-         * Создать [LoadState] в состоянии загрузки
+         * Create loading [LoadState]
          */
         fun <T> loading(
             isSwipeRefresh: Boolean = false,
@@ -36,7 +34,7 @@ data class LoadState<T>(
             )
 
         /**
-         * Создать [LoadState] в состоянии ошибки
+         * Create error [LoadState]
          */
         fun <T> error(
             e: Throwable,
@@ -50,7 +48,7 @@ data class LoadState<T>(
             )
 
         /**
-         * Создать [LoadState] в состоянии показа данных
+         * Create successful [LoadState] with data
          */
         fun <T> data(data: T): LoadState<T> =
             LoadState(
@@ -60,6 +58,4 @@ data class LoadState<T>(
                 isSwipeRefresh = false
             )
     }
-
-    fun isNetworkError(): Boolean = error is ConnectException || error is UnknownHostException
 }

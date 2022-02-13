@@ -30,14 +30,18 @@ class AuthViewModel @Inject constructor(
 
     override suspend fun onAction(action: AuthAction) {
         when (action) {
-            is OnEmailChange -> state.copy(
-                email = action.email,
-                emailError = null
-            ).emit()
-            is OnPasswordChange -> state.copy(
-                password = action.password,
-                passwordError = null
-            ).emit()
+            is OnEmailChange -> setState {
+                copy(
+                    email = action.email,
+                    emailError = null
+                )
+            }
+            is OnPasswordChange -> setState {
+                copy(
+                    password = action.password,
+                    passwordError = null
+                )
+            }
             is OnSignInClick -> onSignInClick()
         }
     }
@@ -51,16 +55,16 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    private suspend fun validate(email: String, password: String): Boolean {
-        state.copy(emailError = null, passwordError = null).emit()
+    private fun validate(email: String, password: String): Boolean {
+        setState { copy(emailError = null, passwordError = null) }
 
         emailValidator.validate(email)?.let {
-            state.copy(emailError = it).emit()
+            setState { copy(emailError = it) }
             return false
         }
 
         passwordValidator.validate(password)?.let {
-            state.copy(passwordError = it).emit()
+            setState { copy(passwordError = it) }
             return false
         }
 
@@ -68,11 +72,11 @@ class AuthViewModel @Inject constructor(
     }
 
     private suspend fun signIn(email: String, password: String) {
-        state.copy(signInLoadState = LoadState.loading()).emit()
+        setState { copy(signInLoadState = LoadState.loading()) }
         firebaseAuthRepository.signIn(email, password)
             .flowOn(Dispatchers.IO)
             .onEach {
-                state.copy(signInLoadState = LoadState.data(Unit)).emit()
+                setState { copy(signInLoadState = LoadState.data(Unit)) }
                 GoToMainScreen.emit()
             }
             .catch {
@@ -80,12 +84,14 @@ class AuthViewModel @Inject constructor(
                 val message = stringsProvider.getString(error.message)
 
                 if (error is ResponseError.WrongCredentialsError) {
-                    state.copy(
-                        signInLoadState = LoadState.error(it),
-                        passwordError = message
-                    ).emit()
+                    setState {
+                        copy(
+                            signInLoadState = LoadState.error(it),
+                            passwordError = message
+                        )
+                    }
                 } else {
-                    state.copy(signInLoadState = LoadState.error(it)).emit()
+                    setState { copy(signInLoadState = LoadState.error(it)) }
                     AuthEffect.ShowMessage(message).emit()
                 }
 

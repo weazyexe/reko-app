@@ -8,47 +8,61 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 /**
- * Базовая [ViewModel] для всех экранов приложения
+ * Base [ViewModel] for all the screens in the app
  */
 abstract class CoreViewModel<S : State, E : Effect, A : Action> : ViewModel() {
 
+    /**
+     * UI state
+     */
     private val _uiState by lazy { MutableStateFlow(initialState) }
     val uiState: StateFlow<S>
         get() = _uiState.asStateFlow()
     protected val state: S
         get() = uiState.value
 
+    /**
+     * Side effects to screen channel
+     */
     private val _effects = Channel<E>(Channel.BUFFERED)
     val effects: Flow<E>
         get() = _effects.receiveAsFlow()
 
+    /**
+     * User's actions channel
+     */
     private val actions = Channel<E>(Channel.BUFFERED)
 
     /**
-     * Первоначальное состояние экрана
+     * Initial screen state
      */
     protected abstract val initialState: S
 
+    /**
+     * Emits some [action]
+     */
     fun emit(action: A) {
         viewModelScope.launch(Dispatchers.Main) {
             onAction(action)
         }
     }
 
-    protected abstract suspend fun onAction(action: A)
-
     /**
-     * Триггер сайд-эффекта
+     * Updates the screen state
      */
-    protected fun E.emit() = viewModelScope.launch {
-        _effects.send(this@emit)
+    protected fun setState(stateBuilder: S.() -> S) {
+        _uiState.value = stateBuilder(uiState.value)
     }
 
     /**
-     * Вызов обновления состояния экрана
-     * и сохранение состояния
+     * Handles new [action]
      */
-    protected suspend fun S.emit() {
-        _uiState.emit(this)
+    protected abstract suspend fun onAction(action: A)
+
+    /**
+     * Triggers side-effect
+     */
+    protected fun E.emit() = viewModelScope.launch {
+        _effects.send(this@emit)
     }
 }

@@ -4,7 +4,7 @@ import android.app.Activity
 import androidx.core.view.WindowCompat
 
 /**
- * Перевод [Activity] в режим edge-to-edge
+ * Enable edge-to-edge mode for [Activity]
  */
 fun Activity.makeEdgeToEdge() {
     WindowCompat.setDecorFitsSystemWindows(window, false)

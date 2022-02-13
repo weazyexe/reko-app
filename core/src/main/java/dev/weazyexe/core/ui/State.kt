@@ -1,6 +1,6 @@
 package dev.weazyexe.core.ui
 
 /**
- * Интерфейс-метка, обозначающий состояние экрана
+ * Marker interface for screen state
  */
 interface State

@@ -1,6 +1,6 @@
 package dev.weazyexe.core.ui
 
 /**
- * Интерфейс-метка для сайд-эффектов
+ * Marker interface for side-effects
  */
 interface Effect
