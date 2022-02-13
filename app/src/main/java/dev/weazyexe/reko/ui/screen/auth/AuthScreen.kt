@@ -13,6 +13,9 @@ import dev.weazyexe.reko.ui.screen.main.MainRoute
 import dev.weazyexe.reko.ui.theme.RekoTheme
 import kotlinx.coroutines.launch
 
+/**
+ * Authorization screen
+ */
 @Composable
 fun AuthScreen(
     navigateTo: (Route) -> Unit = {},

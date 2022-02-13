@@ -18,6 +18,9 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
+/**
+ * [AuthScreen]'s view model
+ */
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val firebaseAuthRepository: FirebaseAuthRepository,

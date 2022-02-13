@@ -28,6 +28,9 @@ import dev.weazyexe.reko.ui.common.components.snackbar.ErrorSnackbar
 import dev.weazyexe.reko.ui.theme.AppTypography
 import dev.weazyexe.reko.ui.theme.RekoTheme
 
+/**
+ * [AuthScreen]'s screen body
+ */
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun AuthBody(
