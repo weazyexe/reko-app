@@ -57,5 +57,16 @@ data class LoadState<T>(
                 isLoading = false,
                 isSwipeRefresh = false
             )
+
+        /**
+         * Create successful [LoadState] with [Unit]
+         */
+        fun data(): LoadState<Unit> =
+            LoadState(
+                data = Unit,
+                error = null,
+                isLoading = false,
+                isSwipeRefresh = false
+            )
     }
 }

@@ -76,7 +76,7 @@ class AuthViewModel @Inject constructor(
         firebaseAuthRepository.signIn(email, password)
             .flowOn(Dispatchers.IO)
             .onEach {
-                setState { copy(signInLoadState = LoadState.data(Unit)) }
+                setState { copy(signInLoadState = LoadState.data()) }
                 GoToMainScreen.emit()
             }
             .catch {
