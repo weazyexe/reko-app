@@ -12,6 +12,7 @@ I wanted to recreate this app with new technology stack, so here we are! If you 
 - Jetpack SplashScreen
 - Jetpack Navigation
 - Kotlin Coroutines
+- Koltinx Serialization
 - Hilt
 - Accompanist
 - Material You
