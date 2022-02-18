@@ -4,15 +4,26 @@ plugins {
     id 'com.google.gms.google-services'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.10'
 }
 
 android {
 
-    buildTypes {
+    def props = new Properties()
+    file("$rootDir/secrets.properties").withInputStream { props.load(it) }
 
+    buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), '../proguard-rules.pro'
+            buildConfigField "String", "APPLICATION_KEY", props.getProperty("application_key")
+            buildConfigField "String", "APPLICATION_SECRET_KEY", props.getProperty("application_key")
+        }
+        
+        debug {
+            minifyEnabled false
+            buildConfigField "String", "APPLICATION_KEY", props.getProperty("application_key")
+            buildConfigField "String", "APPLICATION_SECRET_KEY", props.getProperty("application_key")
         }
     }
 }

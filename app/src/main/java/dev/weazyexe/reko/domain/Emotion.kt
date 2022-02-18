@@ -15,6 +15,7 @@ enum class Emotion(val type: String) {
     HAPPINESS("HAPPINESS"),
     SADNESS("SADNESS"),
     SURPRISE("SURPRISE"),
+    NEUTRAL("NEUTRAL"),
     UNKNOWN(EMPTY_STRING);
 
     @StringRes
@@ -26,6 +27,7 @@ enum class Emotion(val type: String) {
             HAPPINESS -> R.string.emotion_happiness
             SADNESS -> R.string.emotion_sadness
             SURPRISE -> R.string.emotion_surprise
+            NEUTRAL -> R.string.emotion_neutral
             UNKNOWN -> R.string.emotion_unknown
         }
 

@@ -15,6 +15,7 @@
     <string name="emotion_fear">Fear 😱</string>
     <string name="emotion_sadness">Sadness 😞</string>
     <string name="emotion_surprise">Surprise 😲</string>
+    <string name="emotion_neutral">Neutral 😐</string>
     <string name="emotion_unknown">Unrecognized emotion 🥺</string>
 
     <string name="recognizer_local">Local</string>
