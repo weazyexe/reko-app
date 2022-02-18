@@ -27,7 +27,7 @@ class MainViewModel @Inject constructor(
     override val initialState: MainState = MainState()
 
     init {
-        viewModelScope.launch { getImages() }
+        viewModelScope.launch(Dispatchers.Main) { getImages() }
     }
 
     override suspend fun onAction(action: MainAction) {
