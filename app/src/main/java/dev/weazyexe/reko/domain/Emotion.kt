@@ -8,6 +8,7 @@ import dev.weazyexe.reko.R
  * Possible emotions to recognize
  */
 enum class Emotion(val type: String) {
+
     ANGER("ANGER"),
     DISGUST("DISGUST"),
     FEAR("FEAR"),

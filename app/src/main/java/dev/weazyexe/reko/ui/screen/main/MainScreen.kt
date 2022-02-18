@@ -16,10 +16,9 @@ import dev.weazyexe.reko.ui.theme.RekoTheme
  */
 @Composable
 fun MainScreen(
-    navigateTo: (Route) -> Unit = {}
+    navigateTo: (Route) -> Unit = {},
+    mainViewModel: MainViewModel = hiltViewModel()
 ) {
-    val mainViewModel = hiltViewModel<MainViewModel>()
-
     val state by mainViewModel.uiState.collectAsState()
 
     ReceiveEffect(mainViewModel.effects) {

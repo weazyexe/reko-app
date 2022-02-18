@@ -29,6 +29,9 @@ ext {
     // Pretty Time
     prettytime_version = '4.0.4.Final'
 
+    // Coil
+    coil_version = '1.4.0'
+
     // Firebase
     firebase_bom_version = '29.0.3'
 

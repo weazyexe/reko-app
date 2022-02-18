@@ -1,5 +1,6 @@
 package dev.weazyexe.reko.domain
 
+import dev.weazyexe.core.utils.EMPTY_STRING
 import java.util.*
 
 /**
@@ -9,10 +10,12 @@ import java.util.*
  * @param imageUrl url for image to recognize
  * @param date date of image processing
  * @param emotions map of emotions with probabilities
+ * @param recognizer which recognizer was used to recognize the [emotions]
  */
 data class RecognizedImage(
-    val id: String,
-    val imageUrl: String,
-    val date: Date,
-    val emotions: Map<Emotion, Int>
+    val id: String = UUID.randomUUID().toString(),
+    val imageUrl: String = EMPTY_STRING,
+    val date: Date = Date(),
+    val emotions: Map<Emotion, Int> = emptyMap(),
+    val recognizer: Recognizer = Recognizer.LOCAL
 )

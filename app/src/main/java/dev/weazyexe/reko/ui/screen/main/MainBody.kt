@@ -19,21 +19,31 @@ import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
 import dev.weazyexe.core.ui.LoadState
 import dev.weazyexe.reko.R
+import dev.weazyexe.reko.domain.Emotion
 import dev.weazyexe.reko.domain.RecognizedImage
+import dev.weazyexe.reko.domain.Recognizer
+import dev.weazyexe.reko.ui.common.components.scaffold.RekoScaffold
+import dev.weazyexe.reko.ui.screen.main.view.RecognizedImageView
 import dev.weazyexe.reko.ui.theme.RekoTheme
 
+/**
+ * [MainScreen]'s screen body
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainBody(
     imagesLoadState: LoadState<List<RecognizedImage>> = LoadState(data = emptyList()),
     onRecognizeClick: () -> Unit = {}
 ) {
-
-    Scaffold(
+    RekoScaffold(
         modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding(),
-        topBar = {
+        loadState = imagesLoadState,
+        isSwipeRefreshEnabled = true,
+        onSwipeRefresh = {},
+        onRetryClick = {},
+        topAppBar = {
             MediumTopAppBar(
                 title = { Text(stringResource(id = R.string.main_recognized_images_text)) }
             )
@@ -52,13 +62,6 @@ fun MainBody(
     ) {
         val images = imagesLoadState.data
         when {
-            imagesLoadState.isLoading -> {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-            }
             images != null && images.isEmpty() -> {
                 Box(
                     modifier = Modifier
@@ -75,10 +78,16 @@ fun MainBody(
                 }
             }
             images != null -> {
-                LazyColumn {
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .navigationBarsPadding()
+                ) {
                     items(images.size) { index ->
-                        val image = images[index]
-                        // TODO: render image views
+                        RecognizedImageView(
+                            modifier = Modifier.padding(bottom = 16.dp),
+                            image = images[index]
+                        )
                     }
                 }
             }
@@ -88,8 +97,39 @@ fun MainBody(
 
 @Preview(showBackground = true, device = Devices.PIXEL_4)
 @Composable
-fun Preview() {
+private fun EmptyPreview() {
     RekoTheme {
         MainBody()
+    }
+}
+
+@Preview(showBackground = true, device = Devices.PIXEL_4)
+@Composable
+private fun ListPreview() {
+    RekoTheme {
+        MainBody(
+            imagesLoadState = LoadState.data(
+                listOf(
+                    RecognizedImage(
+                        id = "ID",
+                        imageUrl = "https://bit.ly/3rlanB8",
+                        recognizer = Recognizer.LOCAL,
+                        emotions = mapOf(Emotion.SURPRISE to 92)
+                    ),
+                    RecognizedImage(
+                        id = "ID",
+                        imageUrl = "https://bit.ly/3rlanB8",
+                        recognizer = Recognizer.UNKNOWN,
+                        emotions = mapOf(Emotion.ANGER to 84)
+                    ),
+                    RecognizedImage(
+                        id = "ID",
+                        imageUrl = "https://bit.ly/3rlanB8",
+                        recognizer = Recognizer.SKY_BIOMETRY,
+                        emotions = mapOf(Emotion.HAPPINESS to 100)
+                    )
+                )
+            )
+        )
     }
 }

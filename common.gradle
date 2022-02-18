@@ -61,6 +61,7 @@ dependencies {
     implementation "androidx.navigation:navigation-compose:$navigation_compose_version"
     implementation "androidx.hilt:hilt-navigation-compose:$hilt_nav_compose_version"
     implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_version"
 
     // Kotlin Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
@@ -78,6 +79,9 @@ dependencies {
 
     // Pretty Time
     implementation "org.ocpsoft.prettytime:prettytime:$prettytime_version"
+
+    // Coil
+    implementation "io.coil-kt:coil-compose:$coil_version"
 
     // Firebase
     implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")

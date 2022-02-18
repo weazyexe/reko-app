@@ -5,6 +5,10 @@
     <string name="content_description_recognize_emotions_button">Recognize button</string>
     <string name="content_description_snackbar_icon">Snackbar icon</string>
 
+    <string name="scaffold_error_text">Got an error while loading the content. Please try again</string>
+    <string name="scaffold_no_internet_error_text">Can\'t reach our server. Please check your Internet connection</string>
+    <string name="scaffold_retry_text">Retry</string>
+
     <string name="emotion_anger">Anger 😠</string>
     <string name="emotion_disgust">Disgust 🤢</string>
     <string name="emotion_happiness">Happiness 😜</string>
@@ -12,4 +16,8 @@
     <string name="emotion_sadness">Sadness 😞</string>
     <string name="emotion_surprise">Surprise 😲</string>
     <string name="emotion_unknown">Unrecognized emotion 🥺</string>
+
+    <string name="recognizer_local">Local</string>
+    <string name="recognizer_sky_biometry">SkyBiometry</string>
+    <string name="recognizer_unknown">Unknown recognizer 😱</string>
 </resources>

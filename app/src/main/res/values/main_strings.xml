@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <string name="content_description_error_icon">Error icon</string>
+    <string name="content_description_recognized_image">Recognized image with %s emotion</string>
+
     <string name="main_recognized_images_text">Recognized images</string>
     <string name="main_no_images_text">There are no images. Shall you give me some to recognize?</string>
+    <string name="main_recognizer_with_time_text">%s // %s</string>
 </resources>

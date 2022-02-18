@@ -28,6 +28,9 @@ import dev.weazyexe.core.utils.EMPTY_STRING
 import dev.weazyexe.reko.R
 import dev.weazyexe.reko.ui.theme.AppTypography
 
+/**
+ * Base text field for the app
+ */
 @Composable
 fun RekoTextField(
     modifier: Modifier = Modifier,

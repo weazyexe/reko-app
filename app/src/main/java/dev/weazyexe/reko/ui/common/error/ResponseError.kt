@@ -6,25 +6,25 @@ import dev.weazyexe.reko.R
 /**
  * Exception wrapper
  */
-sealed class ResponseError(@StringRes open val message: Int) {
+sealed class ResponseError(@StringRes open val errorMessage: Int): Throwable() {
 
     class UnknownError(
-        override val message: Int = R.string.error_unknown
-    ) : ResponseError(message)
+        override val errorMessage: Int = R.string.error_unknown
+    ) : ResponseError(errorMessage)
 
     class NoInternetError(
-        override val message: Int = R.string.error_no_internet
-    ) : ResponseError(message)
+        override val errorMessage: Int = R.string.error_no_internet
+    ) : ResponseError(errorMessage)
 
     class TimeoutError(
-        override val message: Int = R.string.error_timed_out
-    ) : ResponseError(message)
+        override val errorMessage: Int = R.string.error_timed_out
+    ) : ResponseError(errorMessage)
 
     class WrongCredentialsError(
-        override val message: Int = R.string.error_user_does_not_exist
-    ) : ResponseError(message)
+        override val errorMessage: Int = R.string.error_user_does_not_exist
+    ) : ResponseError(errorMessage)
 
     class TooManyRequestsError(
-        override val message: Int = R.string.error_too_many_requests
-    ) : ResponseError(message)
+        override val errorMessage: Int = R.string.error_too_many_requests
+    ) : ResponseError(errorMessage)
 }
