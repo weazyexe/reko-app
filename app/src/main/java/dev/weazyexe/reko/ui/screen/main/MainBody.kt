@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -34,14 +35,18 @@ import kotlinx.coroutines.launch
 /**
  * [MainScreen]'s screen body
  */
-@OptIn(ExperimentalMaterial3Api::class, androidx.compose.material.ExperimentalMaterialApi::class)
+@OptIn(
+    ExperimentalMaterial3Api::class,
+    ExperimentalMaterialApi::class
+)
 @Composable
 fun MainBody(
-    imagesLoadState: LoadState<List<RecognizedImage>> = LoadState(data = emptyList())
+    imagesLoadState: LoadState<List<RecognizedImage>> = LoadState(data = emptyList()),
+    onCameraClick: () -> Unit = {}
 ) {
     val scope = rememberCoroutineScope()
     val bottomSheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.Hidden
+        ModalBottomSheetValue.Hidden
     )
 
     RekoScaffold(
@@ -55,7 +60,12 @@ fun MainBody(
         bottomSheetState = bottomSheetState,
         bottomSheetContent = {
             PhotoPickerBottomSheet(
-                onCameraClick = {},
+                onCameraClick = {
+                    scope.launch {
+                        bottomSheetState.hide()
+                        onCameraClick()
+                    }
+                },
                 onGalleryClick = {}
             )
         },

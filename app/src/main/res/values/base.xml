@@ -5,6 +5,13 @@
     <string name="content_description_recognize_emotions_button">Recognize button</string>
     <string name="content_description_snackbar_icon">Snackbar icon</string>
 
+    <string name="permissions_denied_title">Permission denied!</string>
+    <string name="permissions_denied_text">We can not do this because you have denied the permission</string>
+    <string name="permissions_denied_with_settings_text">We can not do this because you have denied the permission 🥺. You can allow us to use the permission in settings app</string>
+    <string name="permissions_go_to_settings_text">Go to settings</string>
+    <string name="permissions_cancel_text">Cancel</string>
+    <string name="permissions_ok_text">OK</string>
+
     <string name="scaffold_error_text">Got an error while loading the content. Please try again</string>
     <string name="scaffold_no_internet_error_text">Can\'t reach our server. Please check your Internet connection</string>
     <string name="scaffold_retry_text">Retry</string>
