@@ -10,7 +10,7 @@ import dev.weazyexe.reko.domain.RecognizedImage
  * State for [MainScreen]
  */
 data class MainState(
-    val imagesLoadState: LoadState<List<RecognizedImage>> = LoadState(data = emptyList())
+    val imagesLoadState: LoadState<List<RecognizedImage>> = LoadState()
 ) : State
 
 /**
