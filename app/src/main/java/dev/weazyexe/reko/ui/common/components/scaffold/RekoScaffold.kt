@@ -238,10 +238,10 @@ private fun TransparentLoadingPreview() {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Button(onClick = { /*TODO*/ }) {
+                    Button(onClick = { }) {
                         Text(text = "Button1")
                     }
-                    Button(onClick = { /*TODO*/ }) {
+                    Button(onClick = { }) {
                         Text(text = "Button2")
                     }
                 }
