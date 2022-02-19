@@ -4,10 +4,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -23,18 +26,24 @@ import dev.weazyexe.reko.domain.Emotion
 import dev.weazyexe.reko.domain.RecognizedImage
 import dev.weazyexe.reko.domain.Recognizer
 import dev.weazyexe.reko.ui.common.components.scaffold.RekoScaffold
+import dev.weazyexe.reko.ui.screen.main.bottomsheet.PhotoPickerBottomSheet
 import dev.weazyexe.reko.ui.screen.main.view.RecognizedImageView
 import dev.weazyexe.reko.ui.theme.RekoTheme
+import kotlinx.coroutines.launch
 
 /**
  * [MainScreen]'s screen body
  */
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
 fun MainBody(
-    imagesLoadState: LoadState<List<RecognizedImage>> = LoadState(data = emptyList()),
-    onRecognizeClick: () -> Unit = {}
+    imagesLoadState: LoadState<List<RecognizedImage>> = LoadState(data = emptyList())
 ) {
+    val scope = rememberCoroutineScope()
+    val bottomSheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden
+    )
+
     RekoScaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -43,6 +52,13 @@ fun MainBody(
         isSwipeRefreshEnabled = true,
         onSwipeRefresh = {},
         onRetryClick = {},
+        bottomSheetState = bottomSheetState,
+        bottomSheetContent = {
+            PhotoPickerBottomSheet(
+                onCameraClick = {},
+                onGalleryClick = {}
+            )
+        },
         topAppBar = {
             MediumTopAppBar(
                 title = { Text(stringResource(id = R.string.main_recognized_images_text)) }
@@ -51,7 +67,9 @@ fun MainBody(
         floatingActionButton = {
             FloatingActionButton(
                 modifier = Modifier.navigationBarsPadding(),
-                onClick = { onRecognizeClick() }
+                onClick = {
+                    scope.launch { bottomSheetState.show() }
+                }
             ) {
                 Icon(
                     imageVector = Icons.Filled.Add,

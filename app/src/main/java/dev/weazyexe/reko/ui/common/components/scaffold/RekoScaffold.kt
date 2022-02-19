@@ -1,6 +1,10 @@
 package dev.weazyexe.reko.ui.common.components.scaffold
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.filled.WifiOff
@@ -25,7 +29,7 @@ import dev.weazyexe.reko.ui.theme.RekoTheme
  * Base scaffold for app. It includes all the [LoadState]'s states
  * handling and swipe refresh layout
  */
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun RekoScaffold(
     modifier: Modifier = Modifier,
@@ -33,48 +37,98 @@ fun RekoScaffold(
     isSwipeRefreshEnabled: Boolean = false,
     onSwipeRefresh: () -> Unit = {},
     onRetryClick: () -> Unit = {},
+    bottomSheetState: ModalBottomSheetState? = null,
+    bottomSheetContent: @Composable ColumnScope.() -> Unit = {},
     topAppBar: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
     content: @Composable () -> Unit
-) = Scaffold(
-    modifier = modifier,
-    topBar = topAppBar,
-    floatingActionButton = floatingActionButton
 ) {
-    val isLoading = loadState?.isLoading == true
-    val hasError = loadState?.error != null
-    val hasNoInternetError = loadState?.error is ResponseError.NoInternetError
-    val swipeRefreshState = rememberSwipeRefreshState(
-        isRefreshing = loadState?.isSwipeRefresh == true
-    )
+    if (bottomSheetState != null) {
+        ModalBottomSheetLayout(
+            sheetContent = bottomSheetContent,
+            sheetState = bottomSheetState,
+            sheetShape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp),
+            sheetBackgroundColor = MaterialTheme.colorScheme.surface,
+            sheetContentColor = MaterialTheme.colorScheme.onSurface
+        ) {
+            RekoScaffoldBody(
+                modifier = modifier,
+                topAppBar = topAppBar,
+                floatingActionButton = floatingActionButton,
+                onRetryClick = onRetryClick,
+                onSwipeRefresh = onSwipeRefresh,
+                isSwipeRefreshEnabled = isSwipeRefreshEnabled,
+                loadState = loadState,
+                content = content
+            )
+        }
+    } else {
+        RekoScaffoldBody(
+            modifier = modifier,
+            topAppBar = topAppBar,
+            floatingActionButton = floatingActionButton,
+            onRetryClick = onRetryClick,
+            onSwipeRefresh = onSwipeRefresh,
+            isSwipeRefreshEnabled = isSwipeRefreshEnabled,
+            loadState = loadState,
+            content = content
+        )
+    }
+}
 
-    SwipeRefresh(
-        modifier = Modifier.fillMaxSize(),
-        state = swipeRefreshState,
-        onRefresh = { onSwipeRefresh() },
-        swipeEnabled = isSwipeRefreshEnabled
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun RekoScaffoldBody(
+    modifier: Modifier,
+    topAppBar: @Composable () -> Unit,
+    floatingActionButton: @Composable () -> Unit,
+    onSwipeRefresh: () -> Unit,
+    isSwipeRefreshEnabled: Boolean,
+    loadState: LoadState<*>?,
+    onRetryClick: () -> Unit,
+    content: @Composable () -> Unit
+) {
+    Scaffold(
+        modifier = modifier,
+        topBar = topAppBar,
+        floatingActionButton = floatingActionButton
     ) {
-        when {
-            isLoading -> {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+        val swipeRefreshState = rememberSwipeRefreshState(
+            isRefreshing = loadState?.isSwipeRefresh == true
+        )
+
+        SwipeRefresh(
+            modifier = Modifier.fillMaxSize(),
+            state = swipeRefreshState,
+            onRefresh = { onSwipeRefresh() },
+            swipeEnabled = isSwipeRefreshEnabled
+        ) {
+            val isLoading = loadState?.isLoading == true
+            val hasError = loadState?.error != null
+            val hasNoInternetError = loadState?.error is ResponseError.NoInternetError
+
+            when {
+                isLoading -> {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                    }
                 }
+                hasNoInternetError -> {
+                    ErrorWithIcon(
+                        icon = Icons.Filled.WifiOff,
+                        text = stringResource(id = R.string.scaffold_no_internet_error_text),
+                        onRetryClick = onRetryClick
+                    )
+                }
+                hasError -> {
+                    ErrorWithIcon(
+                        icon = Icons.Filled.Warning,
+                        text = stringResource(id = R.string.scaffold_error_text),
+                        onRetryClick = onRetryClick
+                    )
+                }
+                else -> content.invoke()
             }
-            hasNoInternetError -> {
-                ErrorWithIcon(
-                    icon = Icons.Filled.WifiOff,
-                    text = stringResource(id = R.string.scaffold_no_internet_error_text),
-                    onRetryClick = onRetryClick
-                )
-            }
-            hasError -> {
-                ErrorWithIcon(
-                    icon = Icons.Filled.Warning,
-                    text = stringResource(id = R.string.scaffold_error_text),
-                    onRetryClick = onRetryClick
-                )
-            }
-            else -> content.invoke()
         }
     }
 }
@@ -83,7 +137,7 @@ fun RekoScaffold(
  * Error view with [icon] and [text]
  */
 @Composable
-fun ErrorWithIcon(
+private fun ErrorWithIcon(
     icon: ImageVector,
     text: String,
     onRetryClick: () -> Unit
@@ -121,6 +175,7 @@ fun ErrorWithIcon(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true, device = Devices.PIXEL_4)
 @Composable
 private fun ErrorPreview() {
@@ -129,6 +184,7 @@ private fun ErrorPreview() {
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true, device = Devices.PIXEL_4)
 @Composable
 private fun NoInternetPreview() {
@@ -137,6 +193,7 @@ private fun NoInternetPreview() {
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true, device = Devices.PIXEL_4)
 @Composable
 private fun LoadingPreview() {

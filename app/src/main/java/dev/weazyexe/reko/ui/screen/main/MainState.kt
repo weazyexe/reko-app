@@ -21,11 +21,5 @@ sealed class MainEffect : Effect
 /**
  * Actions for [MainScreen]
  */
-sealed class MainAction : Action {
-
-    /**
-     * On recognize button click action
-     */
-    object OnRecognizeClick : MainAction()
-}
+sealed class MainAction : Action
 

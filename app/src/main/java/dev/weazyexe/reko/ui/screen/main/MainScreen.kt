@@ -8,7 +8,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.weazyexe.core.ui.Route
 import dev.weazyexe.core.utils.ReceiveEffect
-import dev.weazyexe.reko.ui.screen.main.MainAction.OnRecognizeClick
 import dev.weazyexe.reko.ui.theme.RekoTheme
 
 /**
@@ -26,8 +25,7 @@ fun MainScreen(
     }
 
     MainBody(
-        imagesLoadState = state.imagesLoadState,
-        onRecognizeClick = { mainViewModel.emit(OnRecognizeClick) }
+        imagesLoadState = state.imagesLoadState
     )
 }
 

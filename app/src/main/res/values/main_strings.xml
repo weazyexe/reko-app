@@ -3,8 +3,13 @@
 
     <string name="content_description_error_icon">Error icon</string>
     <string name="content_description_recognized_image">Recognized image with %s emotion</string>
+    <string name="content_description_camera_icon">Camera icon</string>
+    <string name="content_description_gallery_icon">Camera icon</string>
 
     <string name="main_recognized_images_text">Recognized images</string>
     <string name="main_no_images_text">There are no images. Shall you give me some to recognize?</string>
     <string name="main_recognizer_with_time_text">%s // %s</string>
+
+    <string name="main_open_camera_text">From camera</string>
+    <string name="main_open_gallery_text">From gallery</string>
 </resources>
