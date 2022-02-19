@@ -1,5 +1,6 @@
 package dev.weazyexe.reko.ui.common.components.scaffold
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
@@ -12,6 +13,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -104,10 +106,25 @@ private fun RekoScaffoldBody(
             swipeEnabled = isSwipeRefreshEnabled
         ) {
             val isLoading = loadState?.isLoading == true
+            val isTransparentLoading = loadState?.isTransparent == true
             val hasError = loadState?.error != null
             val hasNoInternetError = loadState?.error is ResponseError.NoInternetError
 
             when {
+                isTransparentLoading -> {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        content.invoke()
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(MaterialTheme.colorScheme.surface)
+                                .alpha(0.5f)
+                        )
+
+                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                    }
+                }
                 isLoading -> {
                     Box(modifier = Modifier.fillMaxSize()) {
                         CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
@@ -189,7 +206,10 @@ private fun ErrorPreview() {
 @Composable
 private fun NoInternetPreview() {
     RekoTheme {
-        RekoScaffold(loadState = LoadState.error<Unit>(ResponseError.NoInternetError())) {}
+        RekoScaffold(
+            loadState = LoadState.error<Unit>(ResponseError.NoInternetError()),
+            content = {}
+        )
     }
 }
 
@@ -198,6 +218,34 @@ private fun NoInternetPreview() {
 @Composable
 private fun LoadingPreview() {
     RekoTheme {
-        RekoScaffold(loadState = LoadState.loading<Unit>()) {}
+        RekoScaffold(
+            loadState = LoadState.loading<Unit>(),
+            content = {}
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Preview(showBackground = true, device = Devices.PIXEL_4)
+@Composable
+private fun TransparentLoadingPreview() {
+    RekoTheme {
+        RekoScaffold(
+            loadState = LoadState.loading<Unit>(isTransparent = true),
+            content = {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Button(onClick = { /*TODO*/ }) {
+                        Text(text = "Button1")
+                    }
+                    Button(onClick = { /*TODO*/ }) {
+                        Text(text = "Button2")
+                    }
+                }
+            }
+        )
     }
 }

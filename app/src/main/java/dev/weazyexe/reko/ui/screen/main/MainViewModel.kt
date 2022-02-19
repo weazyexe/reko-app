@@ -1,13 +1,18 @@
 package dev.weazyexe.reko.ui.screen.main
 
+import android.graphics.Bitmap
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.weazyexe.core.ui.CoreViewModel
 import dev.weazyexe.core.utils.extensions.data
 import dev.weazyexe.core.utils.extensions.error
 import dev.weazyexe.core.utils.extensions.loading
+import dev.weazyexe.core.utils.providers.StringsProvider
 import dev.weazyexe.reko.data.repository.ImagesRepository
-import dev.weazyexe.reko.ui.common.error.AuthErrorMapper
+import dev.weazyexe.reko.recognizer.Recognizer
+import dev.weazyexe.reko.ui.common.error.MainErrorMapper
+import dev.weazyexe.reko.ui.screen.main.MainAction.RecognizeEmotions
+import dev.weazyexe.reko.ui.screen.main.MainEffect.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -21,8 +26,10 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val imagesRepository: ImagesRepository
-) : CoreViewModel<MainState, MainEffect, MainAction>(), AuthErrorMapper {
+    private val imagesRepository: ImagesRepository,
+    private val recognizer: Recognizer,
+    private val stringsProvider: StringsProvider
+) : CoreViewModel<MainState, MainEffect, MainAction>(), MainErrorMapper {
 
     override val initialState: MainState = MainState()
 
@@ -31,15 +38,36 @@ class MainViewModel @Inject constructor(
     }
 
     override suspend fun onAction(action: MainAction) {
-        // Do nothing
+        when (action) {
+            is RecognizeEmotions -> recognizeEmotions(action.bitmap)
+        }
     }
 
     private suspend fun getImages(isSwipeRefresh: Boolean = false) {
-        setState { copy(imagesLoadState = imagesLoadState.loading(isSwipeRefresh)) }
+        setState { copy(imagesLoadState = imagesLoadState.loading(isSwipeRefresh = isSwipeRefresh)) }
         imagesRepository.getImages()
             .flowOn(Dispatchers.IO)
             .onEach { setState { copy(imagesLoadState = imagesLoadState.data(it)) } }
             .catch { setState { copy(imagesLoadState = imagesLoadState.error(mapError(it))) } }
+            .collect()
+    }
+
+    private suspend fun recognizeEmotions(bitmap: Bitmap) {
+        setState { copy(imagesLoadState = imagesLoadState.loading(isTransparent = true)) }
+        recognizer.recognize(bitmap)
+            .flowOn(Dispatchers.IO)
+            .onEach {
+                setState {
+                    copy(imagesLoadState = imagesLoadState.data(imagesLoadState.data.orEmpty()))
+                }
+                OpenImageScreen(image = it).emit()
+                ShowMessage(stringsProvider.getString(it.mostPossibleEmotion.asStringResource())).emit()
+            }
+            .catch {
+                val errorMessage = mapError(it).errorMessage
+                setState { copy(imagesLoadState = imagesLoadState.data(imagesLoadState.data.orEmpty())) }
+                ShowErrorMessage(stringsProvider.getString(errorMessage)).emit()
+            }
             .collect()
     }
 }

@@ -14,7 +14,8 @@ data class LoadState<T>(
     val data: T? = null,
     val error: Throwable? = null,
     val isLoading: Boolean = false,
-    val isSwipeRefresh: Boolean = false
+    val isSwipeRefresh: Boolean = false,
+    val isTransparent: Boolean = false
 ) : Serializable {
 
     companion object {
@@ -24,13 +25,15 @@ data class LoadState<T>(
          */
         fun <T> loading(
             isSwipeRefresh: Boolean = false,
+            isTransparent: Boolean = false,
             oldData: T? = null
         ): LoadState<T> =
             LoadState(
                 data = oldData,
                 error = null,
                 isLoading = true,
-                isSwipeRefresh = isSwipeRefresh
+                isSwipeRefresh = isSwipeRefresh,
+                isTransparent = isTransparent
             )
 
         /**

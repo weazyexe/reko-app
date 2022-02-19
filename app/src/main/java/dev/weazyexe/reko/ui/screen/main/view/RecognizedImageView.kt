@@ -16,7 +16,7 @@ import coil.compose.rememberImagePainter
 import dev.weazyexe.reko.R
 import dev.weazyexe.reko.domain.Emotion
 import dev.weazyexe.reko.domain.RecognizedImage
-import dev.weazyexe.reko.domain.Recognizer
+import dev.weazyexe.reko.domain.RecognizerType
 import dev.weazyexe.reko.ui.theme.RekoTheme
 import org.ocpsoft.prettytime.PrettyTime
 
@@ -30,13 +30,9 @@ fun RecognizedImageView(
     modifier: Modifier = Modifier
 ) {
     val prettyTime = remember { PrettyTime() }
-    val (topEmotion, _) = image.emotions
-        .maxByOrNull { it.key }
-        ?.toPair()
-        ?: Emotion.UNKNOWN to 0
 
-    val topEmotionDescription = stringResource(id = topEmotion.asStringResource())
-    val recognizerDescription = stringResource(id = image.recognizer.asStringResource())
+    val topEmotionDescription = stringResource(id = image.mostPossibleEmotion.asStringResource())
+    val recognizerDescription = stringResource(id = image.recognizerType.asStringResource())
 
     Card(modifier = modifier.fillMaxWidth()) {
         Column {
@@ -77,7 +73,7 @@ private fun Preview() {
             RecognizedImage(
                 id = "ID",
                 imageUrl = "https://bit.ly/3rlanB8",
-                recognizer = Recognizer.LOCAL,
+                recognizerType = RecognizerType.LOCAL,
                 emotions = mapOf(Emotion.SURPRISE to 92)
             )
         )

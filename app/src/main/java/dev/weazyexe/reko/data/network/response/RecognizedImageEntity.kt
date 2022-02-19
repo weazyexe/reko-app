@@ -3,7 +3,7 @@ package dev.weazyexe.reko.data.network.response
 import dev.weazyexe.core.network.Transformable
 import dev.weazyexe.reko.domain.Emotion
 import dev.weazyexe.reko.domain.RecognizedImage
-import dev.weazyexe.reko.domain.Recognizer
+import dev.weazyexe.reko.domain.RecognizerType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.util.*
@@ -26,7 +26,7 @@ data class RecognizedImageEntity(
             imageUrl = photo.url.replace("http://", "https://"),
             date = Date(),
             emotions = getEmotions(tag),
-            recognizer = Recognizer.SKY_BIOMETRY
+            recognizerType = RecognizerType.SKY_BIOMETRY
         )
     }
 

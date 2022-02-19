@@ -17,13 +17,13 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), '../proguard-rules.pro'
             buildConfigField "String", "APPLICATION_KEY", props.getProperty("application_key")
-            buildConfigField "String", "APPLICATION_SECRET_KEY", props.getProperty("application_key")
+            buildConfigField "String", "APPLICATION_SECRET_KEY", props.getProperty("application_secret_key")
         }
         
         debug {
             minifyEnabled false
             buildConfigField "String", "APPLICATION_KEY", props.getProperty("application_key")
-            buildConfigField "String", "APPLICATION_SECRET_KEY", props.getProperty("application_key")
+            buildConfigField "String", "APPLICATION_SECRET_KEY", props.getProperty("application_secret_key")
         }
     }
 }

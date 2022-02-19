@@ -5,7 +5,7 @@ import com.google.firebase.firestore.PropertyName
 import dev.weazyexe.core.network.Transformable
 import dev.weazyexe.reko.domain.Emotion
 import dev.weazyexe.reko.domain.RecognizedImage
-import dev.weazyexe.reko.domain.Recognizer
+import dev.weazyexe.reko.domain.RecognizerType
 
 /**
  * Image entity from Firestore
@@ -24,7 +24,7 @@ data class ImageEntity(
             imageUrl = image,
             date = timestamp.toDate(),
             emotions = emotions.associate { it.transform() },
-            recognizer = Recognizer.getByType(recognizerName)
+            recognizerType = RecognizerType.getByType(recognizerName)
         )
 }
 

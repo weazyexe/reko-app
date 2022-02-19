@@ -11,7 +11,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -25,11 +24,14 @@ import dev.weazyexe.core.ui.LoadState
 import dev.weazyexe.reko.R
 import dev.weazyexe.reko.domain.Emotion
 import dev.weazyexe.reko.domain.RecognizedImage
-import dev.weazyexe.reko.domain.Recognizer
+import dev.weazyexe.reko.domain.RecognizerType
 import dev.weazyexe.reko.ui.common.components.scaffold.RekoScaffold
+import dev.weazyexe.reko.ui.common.components.snackbar.DefaultSnackbar
+import dev.weazyexe.reko.ui.common.components.snackbar.ErrorSnackbar
 import dev.weazyexe.reko.ui.screen.main.bottomsheet.PhotoPickerBottomSheet
 import dev.weazyexe.reko.ui.screen.main.view.RecognizedImageView
 import dev.weazyexe.reko.ui.theme.RekoTheme
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 /**
@@ -42,9 +44,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainBody(
     imagesLoadState: LoadState<List<RecognizedImage>> = LoadState(data = emptyList()),
+    errorSnackbarHostState: SnackbarHostState? = null,
+    messageSnackbarHostState: SnackbarHostState? = null,
+    scope: CoroutineScope? = null,
     onCameraClick: () -> Unit = {}
 ) {
-    val scope = rememberCoroutineScope()
     val bottomSheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden
     )
@@ -61,7 +65,7 @@ fun MainBody(
         bottomSheetContent = {
             PhotoPickerBottomSheet(
                 onCameraClick = {
-                    scope.launch {
+                    scope?.launch {
                         bottomSheetState.hide()
                         onCameraClick()
                     }
@@ -78,7 +82,7 @@ fun MainBody(
             FloatingActionButton(
                 modifier = Modifier.navigationBarsPadding(),
                 onClick = {
-                    scope.launch { bottomSheetState.show() }
+                    scope?.launch { bottomSheetState.show() }
                 }
             ) {
                 Icon(
@@ -121,6 +125,20 @@ fun MainBody(
             }
         }
     }
+
+    errorSnackbarHostState?.also { hostState ->
+        ErrorSnackbar(
+            modifier = Modifier.statusBarsPadding(),
+            snackbarHostState = hostState
+        )
+    }
+
+    messageSnackbarHostState?.also { hostState ->
+        DefaultSnackbar(
+            modifier = Modifier.statusBarsPadding(),
+            snackbarHostState = hostState
+        )
+    }
 }
 
 @Preview(showBackground = true, device = Devices.PIXEL_4)
@@ -141,19 +159,19 @@ private fun ListPreview() {
                     RecognizedImage(
                         id = "ID",
                         imageUrl = "https://bit.ly/3rlanB8",
-                        recognizer = Recognizer.LOCAL,
+                        recognizerType = RecognizerType.LOCAL,
                         emotions = mapOf(Emotion.SURPRISE to 92)
                     ),
                     RecognizedImage(
                         id = "ID",
                         imageUrl = "https://bit.ly/3rlanB8",
-                        recognizer = Recognizer.UNKNOWN,
+                        recognizerType = RecognizerType.UNKNOWN,
                         emotions = mapOf(Emotion.ANGER to 84)
                     ),
                     RecognizedImage(
                         id = "ID",
                         imageUrl = "https://bit.ly/3rlanB8",
-                        recognizer = Recognizer.SKY_BIOMETRY,
+                        recognizerType = RecognizerType.SKY_BIOMETRY,
                         emotions = mapOf(Emotion.HAPPINESS to 100)
                     )
                 )

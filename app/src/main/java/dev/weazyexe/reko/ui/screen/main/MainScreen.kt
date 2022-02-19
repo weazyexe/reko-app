@@ -4,6 +4,7 @@ import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -13,7 +14,10 @@ import com.google.accompanist.permissions.rememberPermissionState
 import dev.weazyexe.core.ui.Route
 import dev.weazyexe.core.utils.ReceiveEffect
 import dev.weazyexe.reko.ui.common.permissions.PermissionHandler
+import dev.weazyexe.reko.ui.screen.main.MainAction.RecognizeEmotions
+import dev.weazyexe.reko.ui.screen.main.MainEffect.ShowErrorMessage
 import dev.weazyexe.reko.ui.theme.RekoTheme
+import kotlinx.coroutines.launch
 
 /**
  * Main screen with feed
@@ -26,17 +30,30 @@ fun MainScreen(
 ) {
     val state by mainViewModel.uiState.collectAsState()
 
+    val scope = rememberCoroutineScope()
+    val errorSnackbarHostState = remember { SnackbarHostState() }
+    val messageSnackbarHostState = remember { SnackbarHostState() }
     val cameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicturePreview()
-    ) {
-        // handle bitmap
+    ) { bitmap ->
+        bitmap?.let { mainViewModel.emit(RecognizeEmotions(it)) }
     }
     val cameraPermissionState = rememberPermissionState(
         Manifest.permission.CAMERA
     )
 
     ReceiveEffect(mainViewModel.effects) {
-        // TODO handle effects
+        when (this) {
+            is ShowErrorMessage -> scope.launch {
+                errorSnackbarHostState.showSnackbar(message)
+            }
+            is MainEffect.ShowMessage -> scope.launch {
+                messageSnackbarHostState.showSnackbar(message)
+            }
+            else -> {
+                // Do nothing
+            }
+        }
     }
 
     val tryToGetPermission = remember { mutableStateOf(false) }
@@ -48,6 +65,9 @@ fun MainScreen(
 
     MainBody(
         imagesLoadState = state.imagesLoadState,
+        errorSnackbarHostState = errorSnackbarHostState,
+        messageSnackbarHostState = messageSnackbarHostState,
+        scope = scope,
         onCameraClick = {
             tryToGetPermission.value = true
             when {

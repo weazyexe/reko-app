@@ -2,8 +2,8 @@ package dev.weazyexe.reko.domain
 
 import androidx.annotation.StringRes
 import dev.weazyexe.reko.R
-import dev.weazyexe.reko.domain.Recognizer.LOCAL
-import dev.weazyexe.reko.domain.Recognizer.SKY_BIOMETRY
+import dev.weazyexe.reko.domain.RecognizerType.LOCAL
+import dev.weazyexe.reko.domain.RecognizerType.SKY_BIOMETRY
 
 /**
  * Types of emotion recognizers
@@ -11,7 +11,7 @@ import dev.weazyexe.reko.domain.Recognizer.SKY_BIOMETRY
  * @property LOCAL recognizer with local trained model
  * @property SKY_BIOMETRY recognizer from SkyBiometry API
  */
-enum class Recognizer(val type: String) {
+enum class RecognizerType(val type: String) {
 
     LOCAL("LOCAL"),
     SKY_BIOMETRY("SKY_BIOMETRY"),

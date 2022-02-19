@@ -5,4 +5,5 @@
     <string name="error_unknown">Something went wrong, please try again</string>
     <string name="error_user_does_not_exist">Wrong e-mail or password</string>
     <string name="error_too_many_requests">Too many requests, please try your request later</string>
+    <string name="error_faces_not_found">Faces not found</string>
 </resources>

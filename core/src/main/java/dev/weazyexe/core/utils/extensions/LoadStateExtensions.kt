@@ -5,9 +5,13 @@ import dev.weazyexe.core.ui.LoadState
 /**
  * Transforms current [LoadState] to loading
  */
-fun <T> LoadState<T>.loading(isSwipeRefresh: Boolean = false) =
+fun <T> LoadState<T>.loading(
+    isSwipeRefresh: Boolean = false,
+    isTransparent: Boolean = false
+) =
     LoadState.loading(
         isSwipeRefresh = isSwipeRefresh,
+        isTransparent = isTransparent,
         oldData = data
     )
 

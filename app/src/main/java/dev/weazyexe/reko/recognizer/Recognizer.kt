@@ -1,6 +1,6 @@
 package dev.weazyexe.reko.recognizer
 
-import android.net.Uri
+import android.graphics.Bitmap
 import dev.weazyexe.reko.domain.RecognizedImage
 import kotlinx.coroutines.flow.Flow
 
@@ -12,5 +12,5 @@ interface Recognizer {
     /**
      * Recognize emotions from image from [imageUri]
      */
-    fun recognize(imageUri: Uri): Flow<RecognizedImage>
+    fun recognize(bitmap: Bitmap): Flow<RecognizedImage>
 }

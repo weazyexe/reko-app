@@ -27,4 +27,8 @@ sealed class ResponseError(@StringRes open val errorMessage: Int): Throwable() {
     class TooManyRequestsError(
         override val errorMessage: Int = R.string.error_too_many_requests
     ) : ResponseError(errorMessage)
+
+    class FacesNotFoundError(
+        override val errorMessage: Int = R.string.error_faces_not_found
+    ) : ResponseError(errorMessage)
 }
