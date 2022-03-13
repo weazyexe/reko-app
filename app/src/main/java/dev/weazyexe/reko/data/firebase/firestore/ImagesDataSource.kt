@@ -2,6 +2,7 @@ package dev.weazyexe.reko.data.firebase.firestore
 
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
 import dev.weazyexe.reko.data.firebase.auth.AuthDataSource
 import dev.weazyexe.reko.data.firebase.firestore.entity.EmotionEntity
@@ -33,7 +34,11 @@ class ImagesDataSource @Inject constructor(
      * @return list of images
      */
     suspend fun getImages(): Flow<List<ImageEntity>> = flow {
-        val imagesSnapshot = firestore.collection(path).get().await()
+        val imagesSnapshot = firestore.collection(path)
+            .orderBy("recognize_time", Query.Direction.DESCENDING)
+            .get()
+            .await()
+
         emit(imagesSnapshot.documents.mapNotNull { it.toObject() })
     }
 
