@@ -1,5 +1,6 @@
 package dev.weazyexe.reko.ui.screen.main
 
+import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -13,8 +14,10 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
@@ -56,14 +59,16 @@ fun MainBody(
     onRetryClick: () -> Unit = {},
     onSwipeRefresh: () -> Unit = {}
 ) {
+    val decayAnimationSpec = rememberSplineBasedDecay<Float>()
+    val scrollBehavior = remember(decayAnimationSpec) {
+        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(decayAnimationSpec)
+    }
     val bottomSheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden
     )
 
     RekoScaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .statusBarsPadding(),
+        modifier = Modifier.fillMaxSize(),
         loadState = imagesLoadState,
         isSwipeRefreshEnabled = true,
         onSwipeRefresh = onSwipeRefresh,
@@ -86,8 +91,11 @@ fun MainBody(
             )
         },
         topAppBar = {
+            // FIXME in the future use contentPadding instead when it releases
             MediumTopAppBar(
-                title = { Text(stringResource(id = R.string.main_recognized_images_text)) }
+                modifier = Modifier.statusBarsPadding(),
+                title = { Text(stringResource(id = R.string.main_recognized_images_text)) },
+                scrollBehavior = scrollBehavior
             )
         },
         floatingActionButton = {
@@ -126,11 +134,12 @@ fun MainBody(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = 16.dp)
+                        .nestedScroll(scrollBehavior.nestedScrollConnection),
                     contentPadding = rememberInsetsPaddingValues(
                         insets = LocalWindowInsets.current.navigationBars,
                         additionalTop = 16.dp
-                    )
+                    ),
                 ) {
                     items(images.size) { index ->
                         RecognizedImageView(
