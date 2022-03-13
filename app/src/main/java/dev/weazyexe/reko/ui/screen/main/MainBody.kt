@@ -47,7 +47,9 @@ fun MainBody(
     errorSnackbarHostState: SnackbarHostState? = null,
     messageSnackbarHostState: SnackbarHostState? = null,
     scope: CoroutineScope? = null,
-    onCameraClick: () -> Unit = {}
+    onCameraClick: () -> Unit = {},
+    onRetryClick: () -> Unit = {},
+    onSwipeRefresh: () -> Unit = {}
 ) {
     val bottomSheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden
@@ -59,8 +61,8 @@ fun MainBody(
             .statusBarsPadding(),
         loadState = imagesLoadState,
         isSwipeRefreshEnabled = true,
-        onSwipeRefresh = {},
-        onRetryClick = {},
+        onSwipeRefresh = onSwipeRefresh,
+        onRetryClick = onRetryClick,
         bottomSheetState = bottomSheetState,
         bottomSheetContent = {
             PhotoPickerBottomSheet(

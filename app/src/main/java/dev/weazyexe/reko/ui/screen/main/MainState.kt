@@ -44,5 +44,15 @@ sealed class MainAction : Action {
      * Recognize emotion on the [bitmap]
      */
     data class RecognizeEmotions(val bitmap: Bitmap) : MainAction()
+
+    /**
+     * Refresh the feed action
+     */
+    object Refresh : MainAction()
+
+    /**
+     * Refresh the feed with swipe refresh action
+     */
+    object SwipeRefresh : MainAction()
 }
 

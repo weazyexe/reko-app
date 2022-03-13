@@ -14,14 +14,16 @@ import com.google.accompanist.permissions.rememberPermissionState
 import dev.weazyexe.core.ui.Route
 import dev.weazyexe.core.utils.ReceiveEffect
 import dev.weazyexe.reko.ui.common.permissions.PermissionHandler
-import dev.weazyexe.reko.ui.screen.main.MainAction.RecognizeEmotions
+import dev.weazyexe.reko.ui.screen.main.MainAction.*
 import dev.weazyexe.reko.ui.screen.main.MainEffect.ShowErrorMessage
 import dev.weazyexe.reko.ui.theme.RekoTheme
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
 
 /**
  * Main screen with feed
  */
+@FlowPreview
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun MainScreen(
@@ -81,7 +83,9 @@ fun MainScreen(
                     tryToGetPermission.value = true
                 }
             }
-        }
+        },
+        onSwipeRefresh = { mainViewModel.emit(SwipeRefresh) },
+        onRetryClick = { mainViewModel.emit(Refresh) },
     )
 }
 

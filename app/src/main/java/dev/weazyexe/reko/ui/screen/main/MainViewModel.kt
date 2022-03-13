@@ -11,19 +11,18 @@ import dev.weazyexe.core.utils.providers.StringsProvider
 import dev.weazyexe.reko.data.repository.ImagesRepository
 import dev.weazyexe.reko.recognizer.Recognizer
 import dev.weazyexe.reko.ui.common.error.MainErrorMapper
-import dev.weazyexe.reko.ui.screen.main.MainAction.RecognizeEmotions
+import dev.weazyexe.reko.ui.screen.main.MainAction.*
 import dev.weazyexe.reko.ui.screen.main.MainEffect.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
  * ViewModel for [MainScreen]
  */
+@FlowPreview
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val imagesRepository: ImagesRepository,
@@ -40,6 +39,8 @@ class MainViewModel @Inject constructor(
     override suspend fun onAction(action: MainAction) {
         when (action) {
             is RecognizeEmotions -> recognizeEmotions(action.bitmap)
+            is Refresh -> getImages()
+            is SwipeRefresh -> getImages(isSwipeRefresh = true)
         }
     }
 
@@ -55,11 +56,18 @@ class MainViewModel @Inject constructor(
     private suspend fun recognizeEmotions(bitmap: Bitmap) {
         setState { copy(imagesLoadState = imagesLoadState.loading(isTransparent = true)) }
         recognizer.recognize(bitmap)
+            .flatMapConcat {
+                imagesRepository.saveImage(
+                    imageUrl = it.imageUrl,
+                    emotions = it.emotions,
+                    recognizeTime = it.date,
+                    recognizer = it.recognizerType
+                )
+            }
             .flowOn(Dispatchers.IO)
             .onEach {
-                setState {
-                    copy(imagesLoadState = imagesLoadState.data(imagesLoadState.data.orEmpty()))
-                }
+                val newList = listOf(it) + state.imagesLoadState.data.orEmpty()
+                setState { copy(imagesLoadState = imagesLoadState.data(newList)) }
                 OpenImageScreen(image = it).emit()
                 ShowMessage(stringsProvider.getString(it.mostPossibleEmotion.asStringResource())).emit()
             }

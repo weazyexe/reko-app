@@ -1,5 +1,6 @@
 package dev.weazyexe.reko.ui.common.error
 
+import android.util.Log
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.FirebaseTooManyRequestsException
 import dev.weazyexe.reko.ui.common.error.ResponseError.*
@@ -19,6 +20,9 @@ interface ErrorMapper {
             is FirebaseNetworkException -> NoInternetError()
             is TimeoutException -> TimeoutError()
             is FirebaseTooManyRequestsException -> TooManyRequestsError()
-            else -> UnknownError()
+            else -> {
+                Log.e("REKO", "Unknown error", throwable)
+                UnknownError()
+            }
         }
 }
