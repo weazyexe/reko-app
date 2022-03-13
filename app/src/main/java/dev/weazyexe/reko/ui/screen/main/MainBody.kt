@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
@@ -18,7 +20,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.insets.statusBarsPadding
 import dev.weazyexe.core.ui.LoadState
 import dev.weazyexe.reko.R
@@ -101,6 +105,7 @@ fun MainBody(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(16.dp)
+                        .verticalScroll(rememberScrollState())
                 ) {
                     Text(
                         modifier = Modifier
@@ -114,8 +119,12 @@ fun MainBody(
             images != null -> {
                 LazyColumn(
                     modifier = Modifier
-                        .padding(16.dp)
-                        .navigationBarsPadding()
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp),
+                    contentPadding = rememberInsetsPaddingValues(
+                        insets = LocalWindowInsets.current.navigationBars,
+                        additionalTop = 16.dp
+                    )
                 ) {
                     items(images.size) { index ->
                         RecognizedImageView(

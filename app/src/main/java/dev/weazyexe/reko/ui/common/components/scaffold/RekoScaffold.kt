@@ -107,6 +107,7 @@ private fun RekoScaffoldBody(
         ) {
             val isLoading = loadState?.isLoading == true
             val isTransparentLoading = loadState?.isTransparent == true
+            val isSwipeRefreshLoading = loadState?.isSwipeRefresh == true
             val hasError = loadState?.error != null
             val hasNoInternetError = loadState?.error is ResponseError.NoInternetError
 
@@ -124,6 +125,9 @@ private fun RekoScaffoldBody(
 
                         CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                     }
+                }
+                isSwipeRefreshLoading -> {
+                    content.invoke()
                 }
                 isLoading -> {
                     Box(modifier = Modifier.fillMaxSize()) {
