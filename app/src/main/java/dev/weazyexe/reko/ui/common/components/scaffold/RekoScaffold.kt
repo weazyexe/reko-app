@@ -13,7 +13,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -26,6 +25,7 @@ import dev.weazyexe.core.ui.LoadState
 import dev.weazyexe.reko.R
 import dev.weazyexe.reko.ui.common.error.ResponseError
 import dev.weazyexe.reko.ui.theme.RekoTheme
+import dev.weazyexe.reko.utils.noRippleClickable
 
 /**
  * Base scaffold for app. It includes all the [LoadState]'s states
@@ -90,67 +90,72 @@ private fun RekoScaffoldBody(
     onRetryClick: () -> Unit,
     content: @Composable () -> Unit
 ) {
-    Scaffold(
-        modifier = modifier,
-        topBar = topAppBar,
-        floatingActionButton = floatingActionButton
-    ) {
-        val swipeRefreshState = rememberSwipeRefreshState(
-            isRefreshing = loadState?.isSwipeRefresh == true
-        )
-
-        SwipeRefresh(
-            modifier = Modifier.fillMaxSize(),
-            state = swipeRefreshState,
-            onRefresh = { onSwipeRefresh() },
-            swipeEnabled = isSwipeRefreshEnabled
+    @Composable
+    fun withScaffold(content: @Composable () -> Unit) {
+        Scaffold(
+            modifier = modifier,
+            topBar = topAppBar,
+            floatingActionButton = floatingActionButton
         ) {
-            val isLoading = loadState?.isLoading == true
-            val isTransparentLoading = loadState?.isTransparent == true
-            val isSwipeRefreshLoading = loadState?.isSwipeRefresh == true
-            val hasError = loadState?.error != null
-            val hasNoInternetError = loadState?.error is ResponseError.NoInternetError
+            val swipeRefreshState = rememberSwipeRefreshState(
+                isRefreshing = loadState?.isSwipeRefresh == true
+            )
 
-            when {
-                isTransparentLoading -> {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        content.invoke()
-
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(MaterialTheme.colorScheme.surface)
-                                .alpha(0.5f)
-                        )
-
-                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                    }
-                }
-                isSwipeRefreshLoading -> {
-                    content.invoke()
-                }
-                isLoading -> {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                    }
-                }
-                hasNoInternetError -> {
-                    ErrorWithIcon(
-                        icon = Icons.Filled.WifiOff,
-                        text = stringResource(id = R.string.scaffold_no_internet_error_text),
-                        onRetryClick = onRetryClick
-                    )
-                }
-                hasError -> {
-                    ErrorWithIcon(
-                        icon = Icons.Filled.Warning,
-                        text = stringResource(id = R.string.scaffold_error_text),
-                        onRetryClick = onRetryClick
-                    )
-                }
-                else -> content.invoke()
+            SwipeRefresh(
+                modifier = Modifier.fillMaxSize(),
+                state = swipeRefreshState,
+                onRefresh = { onSwipeRefresh() },
+                swipeEnabled = isSwipeRefreshEnabled
+            ) {
+                content.invoke()
             }
         }
+    }
+
+    val isLoading = loadState?.isLoading == true
+    val isTransparentLoading = loadState?.isTransparent == true
+    val isSwipeRefreshLoading = loadState?.isSwipeRefresh == true
+    val hasError = loadState?.error != null
+    val hasNoInternetError = loadState?.error is ResponseError.NoInternetError
+
+    when {
+        isTransparentLoading -> {
+            Box(modifier = Modifier.fillMaxSize()) {
+                withScaffold {
+                    content.invoke()
+                }
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.7f))
+                        .noRippleClickable()
+                )
+
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            }
+        }
+        isSwipeRefreshLoading -> withScaffold { content.invoke() }
+        isLoading -> withScaffold {
+            Box(modifier = Modifier.fillMaxSize()) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            }
+        }
+        hasNoInternetError -> withScaffold {
+            ErrorWithIcon(
+                icon = Icons.Filled.WifiOff,
+                text = stringResource(id = R.string.scaffold_no_internet_error_text),
+                onRetryClick = onRetryClick
+            )
+        }
+        hasError -> withScaffold {
+            ErrorWithIcon(
+                icon = Icons.Filled.Warning,
+                text = stringResource(id = R.string.scaffold_error_text),
+                onRetryClick = onRetryClick
+            )
+        }
+        else -> withScaffold { content.invoke() }
     }
 }
 
