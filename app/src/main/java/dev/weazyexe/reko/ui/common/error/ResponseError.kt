@@ -6,7 +6,7 @@ import dev.weazyexe.reko.R
 /**
  * Exception wrapper
  */
-sealed class ResponseError(@StringRes open val errorMessage: Int): Throwable() {
+sealed class ResponseError(@StringRes open val errorMessage: Int) : Throwable() {
 
     class UnknownError(
         override val errorMessage: Int = R.string.error_unknown

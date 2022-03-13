@@ -9,7 +9,7 @@ import dev.weazyexe.reko.data.network.AuthInterceptor
 import dev.weazyexe.reko.data.network.SkyBiometryApi
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import javax.inject.Singleton
@@ -31,7 +31,7 @@ class NetworkModule {
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .baseUrl("https://api.skybiometry.com/fc/")
-        .addConverterFactory(json.asConverterFactory(MediaType.get("application/json")))
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .client(okHttpClient)
         .build()
 

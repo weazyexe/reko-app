@@ -4,8 +4,6 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.PropertyName
 import dev.weazyexe.core.network.Transformable
 import dev.weazyexe.core.utils.EMPTY_STRING
-import dev.weazyexe.reko.data.firebase.common.FirebaseEntity
-import dev.weazyexe.reko.data.firebase.common.asMap
 import dev.weazyexe.reko.domain.Emotion
 import dev.weazyexe.reko.domain.RecognizedImage
 import dev.weazyexe.reko.domain.RecognizerType
@@ -13,13 +11,27 @@ import dev.weazyexe.reko.domain.RecognizerType
 /**
  * Image entity from Firestore
  */
-data class ImageEntity(
-    @PropertyName("id") val id: String = EMPTY_STRING,
-    @PropertyName("emotions") val emotions: List<EmotionEntity> = emptyList(),
-    @PropertyName("image") val image: String = EMPTY_STRING,
-    @PropertyName("recognize_time") val timestamp: Timestamp = Timestamp.now(),
-    @PropertyName("recognizer_name") val recognizerName: String = EMPTY_STRING
-) : Transformable<RecognizedImage>, FirebaseEntity {
+class ImageEntity(
+    @get:PropertyName("id")
+    @set:PropertyName("id")
+    var id: String = EMPTY_STRING,
+
+    @get:PropertyName("emotions")
+    @set:PropertyName("emotions")
+    var emotions: List<EmotionEntity> = emptyList(),
+
+    @get:PropertyName("image")
+    @set:PropertyName("image")
+    var image: String = EMPTY_STRING,
+
+    @get:PropertyName("recognize_time")
+    @set:PropertyName("recognize_time")
+    var timestamp: Timestamp = Timestamp.now(),
+
+    @get:PropertyName("recognizer_name")
+    @set:PropertyName("recognizer_name")
+    var recognizerName: String = EMPTY_STRING
+) : Transformable<RecognizedImage> {
 
     override fun transform(): RecognizedImage =
         RecognizedImage(
@@ -29,25 +41,20 @@ data class ImageEntity(
             emotions = emotions.associate { it.transform() },
             recognizerType = RecognizerType.getByType(recognizerName)
         )
-
-    override fun asMap(): Map<String, Any?> = hashMapOf(
-        "id" to id,
-        "emotions" to emotions.asMap(),
-        "image" to image,
-        "recognize_time" to timestamp,
-        "recognizer_name" to recognizerName
-    )
 }
 
 /**
  * Emotion entity from Firestore
  */
-data class EmotionEntity(
-    @PropertyName("name") val name: String = EMPTY_STRING,
-    @PropertyName("value") val value: Int = 0
-) : Transformable<Pair<Emotion, Int>>, FirebaseEntity {
+class EmotionEntity(
+    @get:PropertyName("name")
+    @set:PropertyName("name")
+    var name: String = EMPTY_STRING,
+
+    @get:PropertyName("value")
+    @set:PropertyName("value")
+    var value: Int = 0
+) : Transformable<Pair<Emotion, Int>> {
 
     override fun transform(): Pair<Emotion, Int> = Emotion.getByType(name) to value
-
-    override fun asMap(): Map<String, Any?> = hashMapOf("name" to name, "value" to value)
 }

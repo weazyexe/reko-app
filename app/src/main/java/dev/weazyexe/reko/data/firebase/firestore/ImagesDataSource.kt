@@ -34,7 +34,7 @@ class ImagesDataSource @Inject constructor(
      */
     suspend fun getImages(): Flow<List<ImageEntity>> = flow {
         val imagesSnapshot = firestore.collection(path).get().await()
-        emit(imagesSnapshot.documents.mapNotNull { it.toObject<ImageEntity>() })
+        emit(imagesSnapshot.documents.mapNotNull { it.toObject() })
     }
 
     /**
@@ -56,7 +56,7 @@ class ImagesDataSource @Inject constructor(
             timestamp = Timestamp(recognizeTime),
             recognizerName = recognizer.type
         )
-        firestore.document("$path/$id").set(entity.asMap()).await()
+        firestore.document("$path/$id").set(entity).await()
         emit(entity)
     }
 }
