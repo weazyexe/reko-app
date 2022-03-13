@@ -1,11 +1,13 @@
 package dev.weazyexe.reko.ui.screen.main
 
-import android.Manifest
+import android.Manifest.permission.CAMERA
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -13,6 +15,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import dev.weazyexe.core.ui.Route
 import dev.weazyexe.core.utils.ReceiveEffect
+import dev.weazyexe.core.utils.extensions.asBitmap
 import dev.weazyexe.reko.ui.common.permissions.PermissionHandler
 import dev.weazyexe.reko.ui.screen.main.MainAction.*
 import dev.weazyexe.reko.ui.screen.main.MainEffect.ShowErrorMessage
@@ -33,15 +36,24 @@ fun MainScreen(
     val state by mainViewModel.uiState.collectAsState()
 
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
     val errorSnackbarHostState = remember { SnackbarHostState() }
     val messageSnackbarHostState = remember { SnackbarHostState() }
+
+    val cameraPermissionState = rememberPermissionState(CAMERA)
     val cameraLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.TakePicturePreview()
-    ) { bitmap ->
-        bitmap?.let { mainViewModel.emit(RecognizeEmotions(it)) }
-    }
-    val cameraPermissionState = rememberPermissionState(
-        Manifest.permission.CAMERA
+        contract = ActivityResultContracts.TakePicturePreview(),
+        onResult = { bitmap ->
+            bitmap?.let { mainViewModel.emit(RecognizeEmotions(bitmap)) }
+        }
+    )
+
+    val readExternalStoragePermissionState = rememberPermissionState(READ_EXTERNAL_STORAGE)
+    val getContentLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri ->
+            uri?.let { mainViewModel.emit(RecognizeEmotions(uri.asBitmap(context))) }
+        }
     )
 
     ReceiveEffect(mainViewModel.effects) {
@@ -58,11 +70,19 @@ fun MainScreen(
         }
     }
 
-    val tryToGetPermission = remember { mutableStateOf(false) }
+    val tryToGetCameraPermission = remember { mutableStateOf(false) }
+    val tryToGetStoragePermission = remember { mutableStateOf(false) }
+
     PermissionHandler(
         state = cameraPermissionState,
-        isTryingToGetPermission = tryToGetPermission,
+        isTryingToGetPermission = tryToGetCameraPermission,
         onSuccess = { cameraLauncher.launch() }
+    )
+
+    PermissionHandler(
+        state = readExternalStoragePermissionState,
+        isTryingToGetPermission = tryToGetStoragePermission,
+        onSuccess = { getContentLauncher.launch("image/*") }
     )
 
     MainBody(
@@ -71,17 +91,19 @@ fun MainScreen(
         messageSnackbarHostState = messageSnackbarHostState,
         scope = scope,
         onCameraClick = {
-            tryToGetPermission.value = true
-            when {
-                cameraPermissionState.hasPermission -> {
-                    cameraLauncher.launch()
-                }
-                !cameraPermissionState.permissionRequested -> {
-                    cameraPermissionState.launchPermissionRequest()
-                }
-                else -> {
-                    tryToGetPermission.value = true
-                }
+            if (cameraPermissionState.hasPermission) {
+                cameraLauncher.launch()
+            } else {
+                tryToGetCameraPermission.value = true
+                cameraPermissionState.launchPermissionRequest()
+            }
+        },
+        onGalleryClick = {
+            if (readExternalStoragePermissionState.hasPermission) {
+                getContentLauncher.launch("image/*")
+            } else {
+                tryToGetStoragePermission.value = true
+                readExternalStoragePermissionState.launchPermissionRequest()
             }
         },
         onSwipeRefresh = { mainViewModel.emit(SwipeRefresh) },

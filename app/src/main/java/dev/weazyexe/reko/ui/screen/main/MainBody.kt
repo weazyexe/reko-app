@@ -52,6 +52,7 @@ fun MainBody(
     messageSnackbarHostState: SnackbarHostState? = null,
     scope: CoroutineScope? = null,
     onCameraClick: () -> Unit = {},
+    onGalleryClick: () -> Unit = {},
     onRetryClick: () -> Unit = {},
     onSwipeRefresh: () -> Unit = {}
 ) {
@@ -76,7 +77,12 @@ fun MainBody(
                         onCameraClick()
                     }
                 },
-                onGalleryClick = {}
+                onGalleryClick = {
+                    scope?.launch {
+                        bottomSheetState.hide()
+                        onGalleryClick()
+                    }
+                }
             )
         },
         topAppBar = {

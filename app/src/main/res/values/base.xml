@@ -7,7 +7,7 @@
 
     <string name="permissions_denied_title">Permission denied!</string>
     <string name="permissions_denied_text">We can not do this because you have denied the permission</string>
-    <string name="permissions_denied_with_settings_text">We can not do this because you have denied the permission. 🥺 You can allow us to use the permission in settings app</string>
+    <string name="permissions_denied_with_settings_text">We can not do this because you have denied the needed permission several times. You can allow us to use the permission in settings app</string>
     <string name="permissions_go_to_settings_text">Go to settings</string>
     <string name="permissions_cancel_text">Cancel</string>
     <string name="permissions_ok_text">OK</string>
