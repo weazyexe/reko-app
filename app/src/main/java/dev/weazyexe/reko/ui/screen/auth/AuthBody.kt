@@ -23,8 +23,8 @@ import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.google.accompanist.insets.statusBarsPadding
 import dev.weazyexe.core.utils.EMPTY_STRING
 import dev.weazyexe.reko.R
-import dev.weazyexe.reko.ui.common.components.RekoTextField
 import dev.weazyexe.reko.ui.common.components.snackbar.ErrorSnackbar
+import dev.weazyexe.reko.ui.common.components.textfield.RekoTextField
 import dev.weazyexe.reko.ui.theme.AppTypography
 import dev.weazyexe.reko.ui.theme.RekoTheme
 
@@ -119,7 +119,12 @@ fun AuthBody(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 16.dp),
-                text = {
+                onClick = {
+                    if (!isLoading) {
+                        onSignInClick()
+                    }
+                },
+                content = {
                     if (isLoading) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(32.dp),
@@ -127,11 +132,6 @@ fun AuthBody(
                         )
                     } else {
                         Text(text = stringResource(id = R.string.auth_sign_in_text))
-                    }
-                },
-                onClick = {
-                    if (!isLoading) {
-                        onSignInClick()
                     }
                 }
             )

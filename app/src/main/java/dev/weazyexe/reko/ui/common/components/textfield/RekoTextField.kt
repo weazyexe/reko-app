@@ -1,4 +1,4 @@
-package dev.weazyexe.reko.ui.common.components
+package dev.weazyexe.reko.ui.common.components.textfield
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
