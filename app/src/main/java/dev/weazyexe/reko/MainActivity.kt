@@ -10,7 +10,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import dagger.hilt.android.AndroidEntryPoint
 import dev.weazyexe.core.ui.Route
 import dev.weazyexe.core.utils.extensions.makeEdgeToEdge
@@ -20,6 +20,7 @@ import dev.weazyexe.reko.ui.screen.main.MainRoute
 import dev.weazyexe.reko.ui.screen.main.MainScreen
 import dev.weazyexe.reko.ui.theme.RekoTheme
 
+@ExperimentalPermissionsApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
@@ -33,22 +34,21 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             RekoTheme {
-                ProvideWindowInsets {
-                    Surface {
-                        Root(
-                            initialRoute = if (hasUser) {
-                                MainRoute()
-                            } else {
-                                AuthRoute()
-                            }
-                        )
-                    }
+                Surface {
+                    Root(
+                        initialRoute = if (hasUser) {
+                            MainRoute()
+                        } else {
+                            AuthRoute()
+                        }
+                    )
                 }
             }
         }
     }
 }
 
+@ExperimentalPermissionsApi
 @Composable
 fun Root(initialRoute: Route) {
     val navController = rememberNavController()

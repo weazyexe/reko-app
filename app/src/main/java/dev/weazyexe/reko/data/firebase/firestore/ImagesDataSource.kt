@@ -9,8 +9,6 @@ import dev.weazyexe.reko.data.firebase.firestore.entity.EmotionEntity
 import dev.weazyexe.reko.data.firebase.firestore.entity.ImageEntity
 import dev.weazyexe.reko.domain.Emotion
 import dev.weazyexe.reko.domain.RecognizerType
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
@@ -33,13 +31,13 @@ class ImagesDataSource @Inject constructor(
      *
      * @return list of images
      */
-    suspend fun getImages(): Flow<List<ImageEntity>> = flow {
+    suspend fun getImages(): List<ImageEntity> {
         val imagesSnapshot = firestore.collection(path)
             .orderBy("recognize_time", Query.Direction.DESCENDING)
             .get()
             .await()
 
-        emit(imagesSnapshot.documents.mapNotNull { it.toObject() })
+        return imagesSnapshot.documents.mapNotNull { it.toObject() }
     }
 
     /**
@@ -52,7 +50,7 @@ class ImagesDataSource @Inject constructor(
         emotions: Map<Emotion, Int>,
         recognizeTime: Date,
         recognizer: RecognizerType
-    ): Flow<ImageEntity> = flow {
+    ): ImageEntity {
         val id = UUID.randomUUID().toString()
         val entity = ImageEntity(
             id = id,
@@ -62,6 +60,7 @@ class ImagesDataSource @Inject constructor(
             recognizerName = recognizer.type
         )
         firestore.document("$path/$id").set(entity).await()
-        emit(entity)
+
+        return entity
     }
 }

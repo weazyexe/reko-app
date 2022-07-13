@@ -10,7 +10,7 @@ import dev.weazyexe.core.utils.extensions.loading
 import dev.weazyexe.core.utils.providers.StringsProvider
 import dev.weazyexe.reko.data.repository.ImagesRepository
 import dev.weazyexe.reko.recognizer.Recognizer
-import dev.weazyexe.reko.ui.common.error.MainErrorMapper
+import dev.weazyexe.reko.ui.common.error.ResponseError
 import dev.weazyexe.reko.ui.screen.main.MainAction.*
 import dev.weazyexe.reko.ui.screen.main.MainEffect.*
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +28,7 @@ class MainViewModel @Inject constructor(
     private val imagesRepository: ImagesRepository,
     private val recognizer: Recognizer,
     private val stringsProvider: StringsProvider
-) : CoreViewModel<MainState, MainEffect, MainAction>(), MainErrorMapper {
+) : CoreViewModel<MainState, MainEffect, MainAction>() {
 
     override val initialState: MainState = MainState()
 
@@ -49,7 +49,7 @@ class MainViewModel @Inject constructor(
         imagesRepository.getImages()
             .flowOn(Dispatchers.IO)
             .onEach { setState { copy(imagesLoadState = imagesLoadState.data(it)) } }
-            .catch { setState { copy(imagesLoadState = imagesLoadState.error(mapError(it))) } }
+            .catch { setState { copy(imagesLoadState = imagesLoadState.error(it as ResponseError)) } }
             .collect()
     }
 
@@ -72,7 +72,7 @@ class MainViewModel @Inject constructor(
                 ShowMessage(stringsProvider.getString(it.mostPossibleEmotion.asStringResource())).emit()
             }
             .catch {
-                val errorMessage = mapError(it).errorMessage
+                val errorMessage = (it as ResponseError).errorMessage
                 setState { copy(imagesLoadState = imagesLoadState.data(imagesLoadState.data.orEmpty())) }
                 ShowErrorMessage(stringsProvider.getString(errorMessage)).emit()
             }

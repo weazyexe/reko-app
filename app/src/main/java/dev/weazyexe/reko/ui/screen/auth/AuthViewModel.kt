@@ -7,17 +7,15 @@ import dev.weazyexe.core.utils.extensions.error
 import dev.weazyexe.core.utils.extensions.loading
 import dev.weazyexe.core.utils.providers.StringsProvider
 import dev.weazyexe.reko.data.repository.FirebaseAuthRepository
-import dev.weazyexe.reko.ui.common.error.AuthErrorMapper
 import dev.weazyexe.reko.ui.common.error.ResponseError
 import dev.weazyexe.reko.ui.screen.auth.AuthAction.*
 import dev.weazyexe.reko.ui.screen.auth.AuthEffect.GoToMainScreen
 import dev.weazyexe.reko.ui.screen.auth.validator.EmailValidator
 import dev.weazyexe.reko.ui.screen.auth.validator.PasswordValidator
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
 /**
@@ -29,7 +27,7 @@ class AuthViewModel @Inject constructor(
     private val stringsProvider: StringsProvider,
     private val emailValidator: EmailValidator,
     private val passwordValidator: PasswordValidator
-) : CoreViewModel<AuthState, AuthEffect, AuthAction>(), AuthErrorMapper {
+) : CoreViewModel<AuthState, AuthEffect, AuthAction>() {
 
     override val initialState: AuthState = AuthState()
 
@@ -77,15 +75,14 @@ class AuthViewModel @Inject constructor(
     }
 
     private suspend fun signIn(email: String, password: String) {
-        setState { copy(signInLoadState = signInLoadState.loading()) }
         firebaseAuthRepository.signIn(email, password)
-            .flowOn(Dispatchers.IO)
+            .onStart { setState { copy(signInLoadState = signInLoadState.loading()) } }
             .onEach {
                 setState { copy(signInLoadState = signInLoadState.data()) }
                 GoToMainScreen.emit()
             }
             .catch {
-                val error = mapError(it)
+                val error = it as ResponseError
                 val message = stringsProvider.getString(error.errorMessage)
 
                 if (error is ResponseError.WrongCredentialsError) {
@@ -99,7 +96,6 @@ class AuthViewModel @Inject constructor(
                     setState { copy(signInLoadState = signInLoadState.error(error)) }
                     AuthEffect.ShowMessage(message).emit()
                 }
-
             }
             .collect()
     }

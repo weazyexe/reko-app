@@ -3,8 +3,6 @@ package dev.weazyexe.reko.data.firebase.auth
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import dev.weazyexe.reko.data.error.UserDoesNotExistException
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -35,12 +33,12 @@ class AuthDataSource @Inject constructor() {
      * @return firebase user
      * @throws UserDoesNotExistException if user does not exists
      */
-    suspend fun signIn(email: String, password: String): Flow<FirebaseUser> = flow {
+    suspend fun signIn(email: String, password: String): FirebaseUser {
         val result = auth.signInWithEmailAndPassword(email, password).await()
         val user = result.user
 
         if (user != null) {
-            emit(user)
+            return user
         } else {
             throw UserDoesNotExistException()
         }

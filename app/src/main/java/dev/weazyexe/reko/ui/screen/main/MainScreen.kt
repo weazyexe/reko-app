@@ -12,6 +12,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
 import dev.weazyexe.core.ui.Route
 import dev.weazyexe.core.utils.ReceiveEffect
@@ -26,8 +27,8 @@ import kotlinx.coroutines.launch
 /**
  * Main screen with feed
  */
+@ExperimentalPermissionsApi
 @FlowPreview
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun MainScreen(
     navigateTo: (Route) -> Unit = {},
@@ -91,7 +92,7 @@ fun MainScreen(
         messageSnackbarHostState = messageSnackbarHostState,
         scope = scope,
         onCameraClick = {
-            if (cameraPermissionState.hasPermission) {
+            if (cameraPermissionState.status is PermissionStatus.Granted) {
                 cameraLauncher.launch()
             } else {
                 tryToGetCameraPermission.value = true
@@ -99,7 +100,7 @@ fun MainScreen(
             }
         },
         onGalleryClick = {
-            if (readExternalStoragePermissionState.hasPermission) {
+            if (readExternalStoragePermissionState.status is PermissionStatus.Granted) {
                 getContentLauncher.launch("image/*")
             } else {
                 tryToGetStoragePermission.value = true
@@ -111,7 +112,6 @@ fun MainScreen(
     )
 }
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Preview(showBackground = true, device = Devices.PIXEL_4)
 @Composable
 fun MainPreview() {

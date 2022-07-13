@@ -1,11 +1,11 @@
 package dev.weazyexe.reko.data.repository
 
-import dev.weazyexe.core.network.transform
 import dev.weazyexe.core.network.transformCollection
 import dev.weazyexe.reko.data.firebase.firestore.ImagesDataSource
 import dev.weazyexe.reko.domain.Emotion
 import dev.weazyexe.reko.domain.RecognizedImage
 import dev.weazyexe.reko.domain.RecognizerType
+import dev.weazyexe.reko.utils.flowIo
 import kotlinx.coroutines.flow.Flow
 import java.util.*
 import javax.inject.Inject
@@ -24,8 +24,9 @@ class ImagesRepository @Inject constructor(
      *
      * @return list of images
      */
-    suspend fun getImages(): Flow<List<RecognizedImage>> =
+    suspend fun getImages(): Flow<List<RecognizedImage>> = flowIo {
         imagesDataSource.getImages().transformCollection()
+    }
 
     /**
      * Saves recognized image to Firebase Firestore
@@ -37,8 +38,9 @@ class ImagesRepository @Inject constructor(
         emotions: Map<Emotion, Int>,
         recognizeTime: Date,
         recognizer: RecognizerType
-    ): Flow<RecognizedImage> =
+    ): Flow<RecognizedImage> = flowIo {
         imagesDataSource
             .saveImage(imageUrl, emotions, recognizeTime, recognizer)
             .transform()
+    }
 }

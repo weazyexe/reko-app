@@ -1,9 +1,7 @@
 package dev.weazyexe.reko.ui.screen.main
 
 import androidx.compose.animation.rememberSplineBasedDecay
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -23,10 +21,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.navigationBarsPadding
-import com.google.accompanist.insets.rememberInsetsPaddingValues
-import com.google.accompanist.insets.statusBarsPadding
 import dev.weazyexe.core.ui.LoadState
 import dev.weazyexe.reko.R
 import dev.weazyexe.reko.domain.Emotion
@@ -60,8 +54,9 @@ fun MainBody(
     onSwipeRefresh: () -> Unit = {}
 ) {
     val decayAnimationSpec = rememberSplineBasedDecay<Float>()
+    val toolbarScrollState = rememberTopAppBarScrollState()
     val scrollBehavior = remember(decayAnimationSpec) {
-        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(decayAnimationSpec)
+        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(decayAnimationSpec, toolbarScrollState)
     }
     val bottomSheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden
@@ -136,10 +131,7 @@ fun MainBody(
                         .fillMaxSize()
                         .padding(horizontal = 16.dp)
                         .nestedScroll(scrollBehavior.nestedScrollConnection),
-                    contentPadding = rememberInsetsPaddingValues(
-                        insets = LocalWindowInsets.current.navigationBars,
-                        additionalTop = 16.dp
-                    ),
+                    contentPadding = WindowInsets.navigationBars.asPaddingValues()
                 ) {
                     items(images.size) { index ->
                         RecognizedImageView(
