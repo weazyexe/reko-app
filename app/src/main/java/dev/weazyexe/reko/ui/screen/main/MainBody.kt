@@ -1,6 +1,5 @@
 package dev.weazyexe.reko.ui.screen.main
 
-import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
@@ -12,10 +11,8 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
@@ -53,11 +50,6 @@ fun MainBody(
     onRetryClick: () -> Unit = {},
     onSwipeRefresh: () -> Unit = {}
 ) {
-    val decayAnimationSpec = rememberSplineBasedDecay<Float>()
-    val toolbarScrollState = rememberTopAppBarScrollState()
-    val scrollBehavior = remember(decayAnimationSpec) {
-        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(decayAnimationSpec, toolbarScrollState)
-    }
     val bottomSheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden
     )
@@ -89,8 +81,7 @@ fun MainBody(
             // FIXME in the future use contentPadding instead when it releases
             MediumTopAppBar(
                 modifier = Modifier.statusBarsPadding(),
-                title = { Text(stringResource(id = R.string.main_recognized_images_text)) },
-                scrollBehavior = scrollBehavior
+                title = { Text(stringResource(id = R.string.main_recognized_images_text)) }
             )
         },
         floatingActionButton = {
@@ -129,8 +120,7 @@ fun MainBody(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 16.dp)
-                        .nestedScroll(scrollBehavior.nestedScrollConnection),
+                        .padding(horizontal = 16.dp),
                     contentPadding = WindowInsets.navigationBars.asPaddingValues()
                 ) {
                     items(images.size) { index ->

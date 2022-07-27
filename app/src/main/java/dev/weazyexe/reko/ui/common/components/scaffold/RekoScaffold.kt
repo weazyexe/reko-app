@@ -102,13 +102,14 @@ private fun RekoScaffoldBody(
             )
 
             SwipeRefresh(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = it.calculateTopPadding()),
                 state = swipeRefreshState,
                 onRefresh = { onSwipeRefresh() },
-                swipeEnabled = isSwipeRefreshEnabled
-            ) {
-                content.invoke()
-            }
+                swipeEnabled = isSwipeRefreshEnabled,
+                content = content
+            )
         }
     }
 

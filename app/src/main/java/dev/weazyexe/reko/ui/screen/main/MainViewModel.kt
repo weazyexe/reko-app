@@ -56,12 +56,16 @@ class MainViewModel @Inject constructor(
     private suspend fun recognizeEmotions(bitmap: Bitmap) {
         setState { copy(imagesLoadState = imagesLoadState.loading(isTransparent = true)) }
         recognizer.recognize(bitmap)
-            .flatMapConcat {
+            .flatMapConcat { image ->
+                imagesRepository.saveDocumentByUrl(image.imageUrl)
+                    .map { url -> image to url }
+            }
+            .flatMapConcat { (image, url) ->
                 imagesRepository.saveImage(
-                    imageUrl = it.imageUrl,
-                    emotions = it.emotions,
-                    recognizeTime = it.date,
-                    recognizer = it.recognizerType
+                    imageUrl = url,
+                    emotions = image.emotions,
+                    recognizeTime = image.date,
+                    recognizer = image.recognizerType
                 )
             }
             .flowOn(Dispatchers.IO)
@@ -77,5 +81,9 @@ class MainViewModel @Inject constructor(
                 ShowErrorMessage(stringsProvider.getString(errorMessage)).emit()
             }
             .collect()
+    }
+
+    private fun saveImage(url: String) {
+
     }
 }

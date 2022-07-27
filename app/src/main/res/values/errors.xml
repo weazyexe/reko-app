@@ -6,4 +6,6 @@
     <string name="error_user_does_not_exist">Wrong e-mail or password</string>
     <string name="error_too_many_requests">Too many requests, please try your request later</string>
     <string name="error_faces_not_found">Faces not found</string>
+    <string name="error_session_invalid">Session invalid. Please sign in</string>
+    <string name="error_document_upload_error">We got an error while document uploading. Please try again</string>
 </resources>

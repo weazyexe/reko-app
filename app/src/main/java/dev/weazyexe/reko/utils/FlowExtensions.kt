@@ -6,6 +6,8 @@ import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import dev.weazyexe.reko.data.error.FacesNotFoundException
+import dev.weazyexe.reko.data.error.FirebaseDocumentUploadException
+import dev.weazyexe.reko.data.error.SessionInvalidException
 import dev.weazyexe.reko.data.error.UserDoesNotExistException
 import dev.weazyexe.reko.ui.common.error.ResponseError
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +32,8 @@ fun <T> flowIo(action: suspend FlowCollector<T>.() -> T) =
                 is FirebaseNetworkException -> ResponseError.NoInternetError()
 
                 is FacesNotFoundException -> ResponseError.FacesNotFoundError()
+                is SessionInvalidException -> ResponseError.SessionInvalidError()
+                is FirebaseDocumentUploadException -> ResponseError.DocumentUploadError()
 
                 is FirebaseAuthInvalidUserException,
                 is FirebaseAuthInvalidCredentialsException,

@@ -31,4 +31,12 @@ sealed class ResponseError(@StringRes open val errorMessage: Int) : Throwable() 
     class FacesNotFoundError(
         override val errorMessage: Int = R.string.error_faces_not_found
     ) : ResponseError(errorMessage)
+
+    class SessionInvalidError(
+        override val errorMessage: Int = R.string.error_session_invalid
+    ) : ResponseError(errorMessage)
+
+    class DocumentUploadError(
+        override val errorMessage: Int = R.string.error_document_upload_error
+    ) : ResponseError(errorMessage)
 }
