@@ -8,7 +8,7 @@ import dev.weazyexe.reko.domain.RecognizedImage
 import dev.weazyexe.reko.utils.flowIo
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 
 /**
@@ -24,7 +24,7 @@ class SkyBiometryRecognizer(
         val filePart = MultipartBody.Part.createFormData(
             "urls",
             file.name,
-            RequestBody.create(null, file)
+            file.asRequestBody()
         )
 
         val recognizedImage = skyBiometryApi.recognize(filePart)

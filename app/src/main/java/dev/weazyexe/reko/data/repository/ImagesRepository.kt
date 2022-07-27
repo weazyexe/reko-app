@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
+import androidx.core.net.toFile
 import androidx.core.net.toUri
 import coil.imageLoader
 import coil.request.ImageRequest
@@ -73,7 +74,9 @@ class ImagesRepository @Inject constructor(
         val bitmap = downloadImage(url)
         val encodedImage = bitmap.toByteArray()
         val uri = saveImageLocally(encodedImage)
-        storageDataSource.saveDocument(uri, DEFAULT_IMAGE_EXTENSION)
+        val savedUrl = storageDataSource.saveDocument(uri, DEFAULT_IMAGE_EXTENSION)
+        uri.toFile().delete()
+        savedUrl
     }
 
     private suspend fun downloadImage(url: String): Bitmap {

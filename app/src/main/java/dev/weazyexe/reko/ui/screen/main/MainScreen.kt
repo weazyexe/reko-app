@@ -1,7 +1,6 @@
 package dev.weazyexe.reko.ui.screen.main
 
 import android.Manifest.permission.CAMERA
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
@@ -49,7 +48,6 @@ fun MainScreen(
         }
     )
 
-    val readExternalStoragePermissionState = rememberPermissionState(READ_EXTERNAL_STORAGE)
     val getContentLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
@@ -80,12 +78,6 @@ fun MainScreen(
         onSuccess = { cameraLauncher.launch() }
     )
 
-    PermissionHandler(
-        state = readExternalStoragePermissionState,
-        isTryingToGetPermission = tryToGetStoragePermission,
-        onSuccess = { getContentLauncher.launch("image/*") }
-    )
-
     MainBody(
         imagesLoadState = state.imagesLoadState,
         errorSnackbarHostState = errorSnackbarHostState,
@@ -99,14 +91,7 @@ fun MainScreen(
                 cameraPermissionState.launchPermissionRequest()
             }
         },
-        onGalleryClick = {
-            if (readExternalStoragePermissionState.status is PermissionStatus.Granted) {
-                getContentLauncher.launch("image/*")
-            } else {
-                tryToGetStoragePermission.value = true
-                readExternalStoragePermissionState.launchPermissionRequest()
-            }
-        },
+        onGalleryClick = { getContentLauncher.launch("image/*") },
         onSwipeRefresh = { mainViewModel.emit(SwipeRefresh) },
         onRetryClick = { mainViewModel.emit(Refresh) },
     )
